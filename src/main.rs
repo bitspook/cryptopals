@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use anyhow::{Error, Result};
+use anyhow::{Error, Result, bail};
 
 mod text_utils;
 
@@ -51,11 +51,30 @@ pub fn crack_single_byte_xor_cipher(cipher: &[u8]) -> HashMap<u8, String> {
     possible_results
 }
 
-fn main() -> Result<()> {
-    let input = hex::decode("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
-        .unwrap();
+pub fn solve_challenge_4() -> Result<(usize, HashMap<u8, String>)> {
+    let input = std::fs::read_to_string("./challenge-4-file.txt")?;
+    let input = input.split_ascii_whitespace().into_iter();
+    let mut line_num = 0;
 
-    crack_single_byte_xor_cipher(&input);
+    for line in input {
+        line_num += 1;
+
+        let decoded_line = hex::decode(line)?;
+        let solution = crack_single_byte_xor_cipher(&decoded_line);
+
+        if solution.len() > 0 {
+            println!("Found a possible solution for line: {}", line_num);
+            println!("Solution: {:#?}", solution);
+
+            return Ok((line_num, solution));
+        }
+    }
+
+    bail!("No solution");
+}
+
+fn main() -> Result<()> {
+    solve_challenge_4().unwrap();
 
     Ok(())
 }
@@ -98,7 +117,15 @@ mod tests {
         let key = 88;
         let solution = crack_single_byte_xor_cipher(&input);
         let solution_has_key = solution.into_iter().any(|(k, _)| k == key);
+        println!("SAY SOMETHING");
 
         assert_eq!(solution_has_key, true);
+    }
+
+    #[test]
+    fn s1e4_find_xored_line_in_txt_file() {
+        let solution = solve_challenge_4().unwrap();
+
+        assert_eq!(solution.0, 171);
     }
 }
