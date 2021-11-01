@@ -48,10 +48,6 @@ pub fn crack_single_byte_xor_cipher(cipher: &[u8]) -> HashMap<u8, String> {
         }
     }
 
-    for (k, v) in possible_results.clone().into_iter() {
-        println!("POSSIBLE\t\tKEY: {}\tVALUE: {}", k, v);
-    }
-
     possible_results
 }
 
@@ -99,9 +95,10 @@ mod tests {
         let input =
             hex::decode("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
                 .unwrap();
-        let key = 3;
+        let key = 88;
+        let solution = crack_single_byte_xor_cipher(&input);
+        let solution_has_key = solution.into_iter().any(|(k, _)| k == key);
 
-        // assert_eq!(crack_single_byte_xor_cipher(&input), key);
-        assert_eq!(1, 2);
+        assert_eq!(solution_has_key, true);
     }
 }
