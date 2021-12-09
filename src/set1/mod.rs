@@ -3,6 +3,8 @@ use std::collections::HashMap;
 
 use crate::text_utils::*;
 
+mod vigenere;
+
 fn hex_to_b64(input: &str) -> Result<String> {
     let hex_str = hex::decode(input).map_err(Error::from)?;
     let out = base64::encode(hex_str);
@@ -10,11 +12,14 @@ fn hex_to_b64(input: &str) -> Result<String> {
     Ok(out)
 }
 
-/// Takes two equal-length buffers and produces their XOR combination
-fn fixed_xor(b1: &[u8], b2: &[u8]) -> Vec<u8> {
+/// Takes two buffers `b1` and `b2` and produces their XOR combination. If the
+/// length of two buffers is not same, xor is applied until the smaller buffer
+/// is exhausted, and result length is equal to the length of smaller buffer.
+fn xor(b1: &[u8], b2: &[u8]) -> Vec<u8> {
     let mut buf: Vec<u8> = Vec::new();
+    let smaller = if b1.len() < b2.len() { b1 } else { b2 };
 
-    for i in 0..b1.len() {
+    for i in 0..smaller.len() {
         buf.push(b1[i] ^ b2[i]);
     }
 
@@ -107,7 +112,7 @@ mod tests {
         let b2 = hex::decode("686974207468652062756c6c277320657965").unwrap();
         let expected = "746865206b696420646f6e277420706c6179";
 
-        assert_eq!(fixed_xor(&b1, &b2), hex::decode(expected).unwrap());
+        assert_eq!(xor(&b1, &b2), hex::decode(expected).unwrap());
     }
 
     #[test]
