@@ -1,0 +1,3 @@
+* Cryptopals
+
+Just me solving [[https://cryptopals.com/sets/1/challenges/6][cryptopals challenges]] using Rust.

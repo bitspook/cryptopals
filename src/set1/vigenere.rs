@@ -3,6 +3,7 @@ use itertools::Itertools;
 use super::xor;
 
 /// Hamming distance is the number of differing bits in two strings.
+///
 /// # Arguments
 /// * `s1` - the first string as bytes
 /// * `s2` - the second string as bytes
@@ -16,6 +17,19 @@ use super::xor;
 /// let s2 = s2.as_bytes();
 /// assert_eq!(hamming_distance(s1, s2), 37);
 /// ```
+/// # Notes
+/// -   Hamming distance b/w two strings of equal length is the number of positions at
+///     which the corresponding symbols are different
+/// -   It measures minimum number of substitutions required to change one string into
+///     the other
+///
+///
+/// ## Algorithms to find Hamming Distance of two strings
+///
+/// 1.  Brute force; i.e iterate on binary form of both strings and calculate
+///     differing bits
+/// 2.  Xor and count 1s; i.e xor the two strings, and count the number of 1s in the
+///     result
 pub fn hamming_distance(s1: &[u8], s2: &[u8]) -> usize {
     let difference = xor(s1, s2);
 
