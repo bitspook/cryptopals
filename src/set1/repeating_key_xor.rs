@@ -17,12 +17,12 @@ use super::xor;
 /// let s2 = s2.as_bytes();
 /// assert_eq!(hamming_distance(s1, s2), 37);
 /// ```
+///
 /// # Notes
 /// -   Hamming distance b/w two strings of equal length is the number of positions at
 ///     which the corresponding symbols are different
 /// -   It measures minimum number of substitutions required to change one string into
 ///     the other
-///
 ///
 /// ## Algorithms to find Hamming Distance of two strings
 ///
@@ -39,8 +39,8 @@ pub fn hamming_distance(s1: &[u8], s2: &[u8]) -> usize {
         .join("")
         .chars()
         .filter(|x| x == &'1')
-        .collect::<Vec<char>>()
-        .len()
+
+        .count()
 }
 
 /// Produce a list of guesses for the size of the key that might've been used to
@@ -88,8 +88,8 @@ pub fn guess_key_size(cipher: &[u8], sample_size: usize, max_key_length: usize) 
     // println!("Edit distances: {:?}", edit_distances);
 
     edit_distances[0..4]
-        .into_iter()
-        .map(|(k, _)| k.clone())
+        .iter()
+        .map(|(k, _)| *k)
         .collect()
 }
 
@@ -111,7 +111,7 @@ mod tests {
     fn test_guess_key_size() {
         let s1 = "0e3647e8592d35514a081243582536ed3de6734059001e3f535ce6271032";
         let s1 = s1.as_bytes();
-        let guessed_key_sizes = guess_key_size(&s1, 4, 15);
+        let guessed_key_sizes = guess_key_size(s1, 4, 15);
 
         // println!("Guessed key sizes: {:?}", guessed_key_sizes);
 

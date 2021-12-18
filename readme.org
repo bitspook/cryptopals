@@ -1,3 +1,7 @@
 * Cryptopals
+:PROPERTIES:
+:ID:       e909f031-01e1-4af3-899e-01c69fbc07b7
+:END:
 
 Just me solving [[https://cryptopals.com/sets/1/challenges/6][cryptopals challenges]] using Rust.
+

@@ -25,7 +25,7 @@
           cargo-edit
           cargo-audit
           cargo-outdated
-          (rust-bin.stable.latest.default.override {
+          (rust-bin.nightly.latest.default.override {
             extensions = [
               "rust-src"
               "cargo"

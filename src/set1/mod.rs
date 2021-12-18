@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 use crate::text_utils::*;
 
-mod vigenere;
+mod repeating_key_xor;
 
 fn hex_to_b64(input: &str) -> Result<String> {
     let hex_str = hex::decode(input).map_err(Error::from)?;
@@ -55,7 +55,7 @@ fn crack_single_byte_xor_cipher(cipher: &[u8]) -> HashMap<u8, String> {
 
 pub fn solve_challenge_4() -> Result<(usize, HashMap<u8, String>)> {
     let input = std::fs::read_to_string("./challenge-4-file.txt")?;
-    let input = input.split_ascii_whitespace().into_iter();
+    let input = input.split_ascii_whitespace();
     let mut line_num = 0;
 
     for line in input {
@@ -64,7 +64,7 @@ pub fn solve_challenge_4() -> Result<(usize, HashMap<u8, String>)> {
         let decoded_line = hex::decode(line)?;
         let solution = crack_single_byte_xor_cipher(&decoded_line);
 
-        if solution.len() > 0 {
+        if !solution.is_empty() {
             println!("Found a possible solution for line: {}", line_num);
             println!("Solution: {:#?}", solution);
 
@@ -134,7 +134,7 @@ mod tests {
         let solution_has_key = solution.into_iter().any(|(k, _)| k == key);
         println!("SAY SOMETHING");
 
-        assert_eq!(solution_has_key, true);
+        assert!(solution_has_key);
     }
 
     #[test]
