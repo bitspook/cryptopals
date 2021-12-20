@@ -12,15 +12,21 @@ fn hex_to_b64(input: &str) -> Result<String> {
     Ok(out)
 }
 
-/// Takes two buffers `b1` and `b2` and produces their XOR combination. If the
-/// length of two buffers is not same, xor is applied until the smaller buffer
-/// is exhausted, and result length is equal to the length of smaller buffer.
+/// Takes two buffers `b1` and `b2` and produces their XOR
+/// combination. If the length of two buffers is not same, smaller
+/// buffer is repeated until both buffers are of same length. 
 fn xor(b1: &[u8], b2: &[u8]) -> Vec<u8> {
     let mut buf: Vec<u8> = Vec::new();
+    let bigger = if b1.len() < b2.len() { b2 } else { b1 };
     let smaller = if b1.len() < b2.len() { b1 } else { b2 };
+    let mut smaller = smaller.to_vec();
+
+    for i in 0..(bigger.len() - smaller.len()) {
+	smaller.push(smaller[i]);
+    }
 
     for i in 0..smaller.len() {
-        buf.push(b1[i] ^ b2[i]);
+        buf.push(bigger[i] ^ smaller[i]);
     }
 
     buf

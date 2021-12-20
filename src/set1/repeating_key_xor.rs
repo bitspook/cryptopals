@@ -109,12 +109,19 @@ mod tests {
 
     #[test]
     fn test_guess_key_size() {
-        let s1 = "0e3647e8592d35514a081243582536ed3de6734059001e3f535ce6271032";
-        let s1 = s1.as_bytes();
-        let guessed_key_sizes = guess_key_size(s1, 4, 15);
+        let plain_text = "How do you do. I am well thank you. Some random message. Cat has blue eyes.";
+        let key = "water";
+        let key_size = key.as_bytes().len();
 
-        // println!("Guessed key sizes: {:?}", guessed_key_sizes);
+        let cipher = xor(plain_text.as_bytes(), key.as_bytes());
 
-        assert_eq!(guessed_key_sizes.len(), 4);
+        let guessed_key_sizes = guess_key_size(&cipher);
+
+        println!(
+            "Actual Key size: {}. Guessed key sizes: {:?}",
+            key_size, guessed_key_sizes
+        );
+
+        assert!(guessed_key_sizes.contains(&key_size));
     }
 }
