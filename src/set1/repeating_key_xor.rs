@@ -39,7 +39,6 @@ pub fn hamming_distance(s1: &[u8], s2: &[u8]) -> usize {
         .join("")
         .chars()
         .filter(|x| x == &'1')
-
         .count()
 }
 
@@ -48,49 +47,44 @@ pub fn hamming_distance(s1: &[u8], s2: &[u8]) -> usize {
 ///
 /// # Arguments
 /// * `cipher` - The cipher text
-/// * `sample_size` - the number of blocks which are sampled to calculate hamming-distance for
-///                   finding repeating strings
-/// * `max_key_length` - maximum key-length which is used for sampling.
-///
-/// # Panics
-/// 1. If `max_key_length * sample_size > cipher.len()`, this function will panic because of
-///    out-of-index error which will be caused when attempting to take a chunk of `max_key_size`
-///    from cipher-text which isn't long enough.
-pub fn guess_key_size(cipher: &[u8], sample_size: usize, max_key_length: usize) -> Vec<usize> {
-    let mut edit_distances: Vec<(usize, usize)> = vec![];
+pub fn guess_key_size(cipher: &[u8]) -> Vec<usize> {
+    let mut nhds: Vec<(usize, f32)> = vec![];
 
-    for key_size in 2..=max_key_length {
+    for partitions in (2..).step_by(2) {
+        let sample_size = partitions / 2;
+        let key_size = cipher.len() / partitions;
+
+        if key_size <= 2 {
+            break;
+        }
+
         let max_index = key_size * sample_size;
         if max_index > cipher.len() {
-            panic!("Keysize out of bounds. Please reduce max key-size or chunk-size");
+            panic!("Keysize out of bounds. Please reduce max key-size or sample-size");
         }
 
         let mut chunks: Vec<&[u8]> = vec![&cipher[0..key_size]];
-        for cn in 2..=sample_size {
+        for cn in 2..=partitions {
             chunks.push(&cipher[key_size..(key_size * cn)]);
         }
 
-        let edit_distance: usize = chunks
-            .clone()
-            .into_iter()
-            .cartesian_product(chunks.into_iter())
-            .map(|(c1, c2)| hamming_distance(c1, c2))
-            .sum();
-        let edit_distance = edit_distance / sample_size;
+        let mut edit_distances: Vec<usize> = vec![];
+        for i in (0..chunks.len()).step_by(2) {
+            edit_distances.push(hamming_distance(chunks[i], chunks[i + 1]));
+        }
 
-        let normalized_edit_distance = edit_distance / key_size;
+        let edit_distance: usize = edit_distances.into_iter().sum();
+        let avg_edit_distance = edit_distance as f32 / chunks.len() as f32;
+        let normalized_edit_distance = avg_edit_distance / key_size as f32;
 
-        edit_distances.push((key_size, normalized_edit_distance));
+        nhds.push((key_size, normalized_edit_distance));
     }
 
-    edit_distances.sort_unstable_by(|(_, d1), (_, d2)| d1.cmp(d2));
+    nhds.sort_unstable_by(|(_, d1), (_, d2)| d1.partial_cmp(d2).unwrap());
 
-    // println!("Edit distances: {:?}", edit_distances);
+    println!("Edit distances: {:?}", nhds);
 
-    edit_distances[0..4]
-        .iter()
-        .map(|(k, _)| *k)
-        .collect()
+    nhds.iter().map(|(k, _)| *k).collect()
 }
 
 #[cfg(test)]
