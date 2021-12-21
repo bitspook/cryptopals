@@ -14,9 +14,9 @@ a bunch of things at the same time here. So don't take my word for
 anything; be vigilant about mistakes and misstatements.
 #+end_quote
 
-* Set 1
-
-** Convert Hex to Base64
+* Set 1 
+ 
+** Challenge 1: Convert Hex to Base64
 :PROPERTIES:
 :header-args: :tangle src/set1/challenge1.rs :comments link
 :END:
@@ -26,13 +26,13 @@ string, and we have to encode it to base64 instead. I decided to not
 go down the rabbit hole here and use the libraries which handle
 encoding/decoding to/from hex/base64.
 
-#+name: hex-to-b64
-#+ATTR_HTML: :class hex-to-b64
-#+begin_src rust 
+#+begin_src rust :exports none
   use anyhow::{Result, Error};
 
   use wasm_bindgen::prelude::*;	
+#+end_src
 
+#+begin_src rust 
   pub fn hex_to_b64(input: &str) -> Result<String> {
       let hex_str = hex::decode(input).map_err(Error::from)?;
       let out = base64::encode(hex_str);
@@ -45,12 +45,7 @@ I am using [[https://github.com/dtolnay/anyhow][anyhow]] library to return =anyh
 is convenient. I also use it in my (relatively) bigger rust
 applications.
 
-Unfortunately we can't play with with above code in the browser as is
-because =Result= won't go through =wasm_bindgen=. This little snippet
-does the nasty and give us a version of =hex_to_b64= we can run in
-browser.
-
-#+begin_src rust 
+#+begin_src rust :exports none
   #[wasm_bindgen]
   pub fn hex_to_b64_web(input: &str) -> String {
       hex_to_b64(input).unwrap()
@@ -59,24 +54,23 @@ browser.
 
 You can play around with the result of above code.
 
-#+begin_export html
+#+begin_export html 
 <play-function
   fn="cryptopals.hex_to_b64_web"
   display-name="hex_to_b64"
   error-message="Input is not a valid HEX encoded string"
-/>
+></play-function>
 #+end_export
 
 Entering the test string given in the [[https://cryptopals.com/sets/1/challenges/1][challenge]] produce the expected
 output.
-
+ 
 But let's go a step further and write a test! One of the things I like
 about rust is how easy it makes to write tests. We can drop the
 following snippet in the same file and =cargo test= will run it. The
-lack of friction makes for a great developer experience, for which I
-am a sucker.
+lack of friction makes for a great developer experience.
 
-#+begin_src rust 
+#+begin_src rust
   #[cfg(test)]
   mod tests {
       use super::*;
@@ -90,3 +84,13 @@ am a sucker.
       }
   }
 #+end_src
+
+** Challenge 2: Fixed XOR
+:PROPERTIES:
+:header-args: :tangle src/set1/challenge2.rs :comments link
+:END:
+
+# Local Variables:
+# org-html-htmlize-font-prefix: "hljs-"
+# org-html-htmlize-output-type: css
+# End:

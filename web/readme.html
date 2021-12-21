@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-12-21 Tue 19:48 -->
+<!-- 2021-12-21 Tue 21:35 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cryptopals</title>
@@ -21,7 +21,8 @@
 <ul>
 <li><a href="#orga7fc570">Set 1</a>
 <ul>
-<li><a href="#orgf0d65f4">Convert Hex to Base64</a></li>
+<li><a href="#org2aeb0c4">Challenge 1: Convert Hex to Base64</a></li>
+<li><a href="#orgcd6ce0e">Challenge 2: Fixed XOR</a></li>
 </ul>
 </li>
 </ul>
@@ -45,9 +46,9 @@ anything; be vigilant about mistakes and misstatements.
 <h2 id="orga7fc570">Set 1</h2>
 <div class="outline-text-2" id="text-orga7fc570">
 </div>
-<div id="outline-container-orgf0d65f4" class="outline-3">
-<h3 id="orgf0d65f4">Convert Hex to Base64</h3>
-<div class="outline-text-3" id="text-orgf0d65f4">
+<div id="outline-container-org2aeb0c4" class="outline-3">
+<h3 id="org2aeb0c4">Challenge 1: Convert Hex to Base64</h3>
+<div class="outline-text-3" id="text-org2aeb0c4">
 <p>
 First challenge is straightforward enough, we are given a HEX encoded
 string, and we have to encode it to base64 instead. I decided to not
@@ -55,40 +56,21 @@ go down the rabbit hole here and use the libraries which handle
 encoding/decoding to/from hex/base64.
 </p>
 
-<div class="hex-to-b64" ><div class="org-src-container">
-<pre class="src src-rust" id="orge09c134">use anyhow::{Result, Error};
+<div class="org-src-container">
+<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">hex_to_b64</span>(<span class="hljs-variable-name">input</span>: &amp;<span class="hljs-type">str</span>) -&gt; <span class="hljs-type">Result</span>&lt;<span class="hljs-type">String</span>&gt; {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable-name">hex_str</span> = <span class="hljs-constant">hex</span>::decode(input).map_err(<span class="hljs-type">Error</span>::from)<span class="hljs-rust-question-mark">?</span>;
+    <span class="hljs-keyword">let</span> <span class="hljs-variable-name">out</span> = <span class="hljs-constant">base64</span>::encode(hex_str);
 
-use wasm_bindgen::prelude::*;	
-
-pub fn hex_to_b64(input: &amp;str) -&gt; Result&lt;String&gt; {
-    let hex_str = hex::decode(input).map_err(Error::from)?;
-    let out = base64::encode(hex_str);
-
-    Ok(out)
+    <span class="hljs-type">Ok</span>(out)
 }
 </pre>
-</div></div>
+</div>
 
 <p>
 I am using <a href="https://github.com/dtolnay/anyhow">anyhow</a> library to return <code>anyhow::Result</code> here; because it
 is convenient. I also use it in my (relatively) bigger rust
 applications.
 </p>
-
-<p>
-Unfortunately we can't play with with above code in the browser as is
-because <code>Result</code> won't go through <code>wasm_bindgen</code>. This little snippet
-does the nasty and give us a version of <code>hex_to_b64</code> we can run in
-browser.
-</p>
-
-<div class="org-src-container">
-<pre class="src src-rust">#[wasm_bindgen]
-pub fn hex_to_b64_web(input: &amp;str) -&gt; String {
-    hex_to_b64(input).unwrap()
-}
-</pre>
-</div>
 
 <p>
 You can play around with the result of above code.
@@ -98,7 +80,7 @@ You can play around with the result of above code.
   fn="cryptopals.hex_to_b64_web"
   display-name="hex_to_b64"
   error-message="Input is not a valid HEX encoded string"
-/>
+></play-function>
 
 <p>
 Entering the test string given in the <a href="https://cryptopals.com/sets/1/challenges/1">challenge</a> produce the expected
@@ -109,32 +91,37 @@ output.
 But let's go a step further and write a test! One of the things I like
 about rust is how easy it makes to write tests. We can drop the
 following snippet in the same file and <code>cargo test</code> will run it. The
-lack of friction makes for a great developer experience, for which I
-am a sucker.
+lack of friction makes for a great developer experience.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-rust">#[cfg(test)]
-mod tests {
-    use super::*;
+<pre class="src src-rust"><span class="hljs-preprocessor">#[cfg(test)]</span>
+<span class="hljs-keyword">mod</span> <span class="hljs-constant">tests</span> {
+    <span class="hljs-keyword">use</span> <span class="hljs-keyword">super</span>::*;
 
-    #[test]
-    fn s1e1_hex_to_b64() {
-	let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-	let output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
+    <span class="hljs-preprocessor">#[test]</span>
+    <span class="hljs-keyword">fn</span> <span class="hljs-function-name">s1e1_hex_to_b64</span>() {
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">input</span> = <span class="hljs-string">"49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"</span>;
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">output</span> = <span class="hljs-string">"SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"</span>;
 
-	assert_eq!(hex_to_b64(input).unwrap(), output);
+        <span class="hljs-preprocessor">assert_eq!</span>(hex_to_b64(input).unwrap(), output);
     }
 }
 </pre>
 </div>
 </div>
 </div>
+
+<div id="outline-container-orgcd6ce0e" class="outline-3">
+<h3 id="orgcd6ce0e">Challenge 2: Fixed XOR</h3>
+<div class="outline-text-3" id="text-orgcd6ce0e">
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Charanjit Singh</p>
-<p class="date">Created: 2021-12-21 Tue 19:48</p>
+<p class="date">Created: 2021-12-21 Tue 21:35</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.0.50 (<a href="https://orgmode.org">Org</a> mode 9.5.1)</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

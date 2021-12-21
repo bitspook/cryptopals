@@ -28,6 +28,7 @@ const HexToB64 = ({ fn, displayName, errorMessage }: HexToB64Props) => {
         setOutput(b64);
         setError("");
       } catch (err) {
+        console.error(`Error while playing ${displayName}: `, err);
         setOutput("");
         setError(errorMessage);
       }

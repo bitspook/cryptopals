@@ -9,18 +9,6 @@ mod repeating_key_xor;
 mod challenge1;
 
 #[wasm_bindgen]
-pub fn hex_to_b64_web(input: &str) -> String {
-    hex_to_b64(input).unwrap()
-}
-
-pub fn hex_to_b64(input: &str) -> Result<String> {
-    let hex_str = hex::decode(input).map_err(Error::from)?;
-    let out = base64::encode(hex_str);
-
-    Ok(out)
-}
-
-#[wasm_bindgen]
 /// Takes two buffers `b1` and `b2` and produces their XOR
 /// combination. If the length of two buffers is not same, smaller
 /// buffer is repeated until both buffers are of same length. 
@@ -112,14 +100,6 @@ pub fn str_encrypt_repeating_key_xor(key: &str, input: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn s1e1_hex_to_b64() {
-        let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-        let output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
-
-        assert_eq!(hex_to_b64(input).unwrap(), output);
-    }
 
     #[test]
     fn s1e2_fixed_xor() {
