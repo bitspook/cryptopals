@@ -1,21 +1,30 @@
 use anyhow::{bail, Error, Result};
 use std::collections::HashMap;
+use wasm_bindgen::prelude::*;
 
 use crate::text_utils::*;
 
 mod repeating_key_xor;
 
-fn hex_to_b64(input: &str) -> Result<String> {
+mod challenge1;
+
+#[wasm_bindgen]
+pub fn hex_to_b64_web(input: &str) -> String {
+    hex_to_b64(input).unwrap()
+}
+
+pub fn hex_to_b64(input: &str) -> Result<String> {
     let hex_str = hex::decode(input).map_err(Error::from)?;
     let out = base64::encode(hex_str);
 
     Ok(out)
 }
 
+#[wasm_bindgen]
 /// Takes two buffers `b1` and `b2` and produces their XOR
 /// combination. If the length of two buffers is not same, smaller
 /// buffer is repeated until both buffers are of same length. 
-fn xor(b1: &[u8], b2: &[u8]) -> Vec<u8> {
+pub fn xor(b1: &[u8], b2: &[u8]) -> Vec<u8> {
     let mut buf: Vec<u8> = Vec::new();
     let bigger = if b1.len() < b2.len() { b2 } else { b1 };
     let smaller = if b1.len() < b2.len() { b1 } else { b2 };

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-12-21 Tue 19:48 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cryptopals</title>
+<meta name="author" content="Charanjit Singh" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="scss/main.scss"/>
+<script type="module" src="./index.tsx"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Cryptopals</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orga7fc570">Set 1</a>
+<ul>
+<li><a href="#orgf0d65f4">Convert Hex to Base64</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+This page is me solving <a href="https://cryptopals.com/sets/1/challenges/6">cryptopals challenges</a> with Rust, and taking
+notes. UI widgets accompanying the rust snippets are running the wasm
+compiled version of the snippet.
+</p>
+
+<blockquote>
+<p>
+Please note that although I am publishing this publicly, I am learning
+a bunch of things at the same time here. So don't take my word for
+anything; be vigilant about mistakes and misstatements.
+</p>
+</blockquote>
+
+<div id="outline-container-orga7fc570" class="outline-2">
+<h2 id="orga7fc570">Set 1</h2>
+<div class="outline-text-2" id="text-orga7fc570">
+</div>
+<div id="outline-container-orgf0d65f4" class="outline-3">
+<h3 id="orgf0d65f4">Convert Hex to Base64</h3>
+<div class="outline-text-3" id="text-orgf0d65f4">
+<p>
+First challenge is straightforward enough, we are given a HEX encoded
+string, and we have to encode it to base64 instead. I decided to not
+go down the rabbit hole here and use the libraries which handle
+encoding/decoding to/from hex/base64.
+</p>
+
+<div class="hex-to-b64" ><div class="org-src-container">
+<pre class="src src-rust" id="orge09c134">use anyhow::{Result, Error};
+
+use wasm_bindgen::prelude::*;	
+
+pub fn hex_to_b64(input: &amp;str) -&gt; Result&lt;String&gt; {
+    let hex_str = hex::decode(input).map_err(Error::from)?;
+    let out = base64::encode(hex_str);
+
+    Ok(out)
+}
+</pre>
+</div></div>
+
+<p>
+I am using <a href="https://github.com/dtolnay/anyhow">anyhow</a> library to return <code>anyhow::Result</code> here; because it
+is convenient. I also use it in my (relatively) bigger rust
+applications.
+</p>
+
+<p>
+Unfortunately we can't play with with above code in the browser as is
+because <code>Result</code> won't go through <code>wasm_bindgen</code>. This little snippet
+does the nasty and give us a version of <code>hex_to_b64</code> we can run in
+browser.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-rust">#[wasm_bindgen]
+pub fn hex_to_b64_web(input: &amp;str) -&gt; String {
+    hex_to_b64(input).unwrap()
+}
+</pre>
+</div>
+
+<p>
+You can play around with the result of above code.
+</p>
+
+<play-function
+  fn="cryptopals.hex_to_b64_web"
+  display-name="hex_to_b64"
+  error-message="Input is not a valid HEX encoded string"
+/>
+
+<p>
+Entering the test string given in the <a href="https://cryptopals.com/sets/1/challenges/1">challenge</a> produce the expected
+output.
+</p>
+
+<p>
+But let's go a step further and write a test! One of the things I like
+about rust is how easy it makes to write tests. We can drop the
+following snippet in the same file and <code>cargo test</code> will run it. The
+lack of friction makes for a great developer experience, for which I
+am a sucker.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-rust">#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn s1e1_hex_to_b64() {
+	let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+	let output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
+
+	assert_eq!(hex_to_b64(input).unwrap(), output);
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Charanjit Singh</p>
+<p class="date">Created: 2021-12-21 Tue 19:48</p>
+<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.0.50 (<a href="https://orgmode.org">Org</a> mode 9.5.1)</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

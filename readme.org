@@ -1,7 +1,92 @@
-* Cryptopals
+#+title: Cryptopals
+#+author: Charanjit Singh
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="scss/main.scss"/>
+#+HTML_HEAD: <script type="module" src="./index.tsx"></script>
+#+OPTIONS: html-style:nil num:nil creator:comment
+
+This page is me solving [[https://cryptopals.com/sets/1/challenges/6][cryptopals challenges]] with Rust, and taking
+notes. UI widgets accompanying the rust snippets are running the wasm
+compiled version of the snippet.
+
+#+begin_quote
+Please note that although I am publishing this publicly, I am learning
+a bunch of things at the same time here. So don't take my word for
+anything; be vigilant about mistakes and misstatements.
+#+end_quote
+
+* Set 1
+
+** Convert Hex to Base64
 :PROPERTIES:
-:ID:       e909f031-01e1-4af3-899e-01c69fbc07b7
+:header-args: :tangle src/set1/challenge1.rs :comments link
 :END:
 
-Just me solving [[https://cryptopals.com/sets/1/challenges/6][cryptopals challenges]] using Rust.
+First challenge is straightforward enough, we are given a HEX encoded
+string, and we have to encode it to base64 instead. I decided to not
+go down the rabbit hole here and use the libraries which handle
+encoding/decoding to/from hex/base64.
 
+#+name: hex-to-b64
+#+ATTR_HTML: :class hex-to-b64
+#+begin_src rust 
+  use anyhow::{Result, Error};
+
+  use wasm_bindgen::prelude::*;	
+
+  pub fn hex_to_b64(input: &str) -> Result<String> {
+      let hex_str = hex::decode(input).map_err(Error::from)?;
+      let out = base64::encode(hex_str);
+
+      Ok(out)
+  }
+#+end_src
+
+I am using [[https://github.com/dtolnay/anyhow][anyhow]] library to return =anyhow::Result= here; because it
+is convenient. I also use it in my (relatively) bigger rust
+applications.
+
+Unfortunately we can't play with with above code in the browser as is
+because =Result= won't go through =wasm_bindgen=. This little snippet
+does the nasty and give us a version of =hex_to_b64= we can run in
+browser.
+
+#+begin_src rust 
+  #[wasm_bindgen]
+  pub fn hex_to_b64_web(input: &str) -> String {
+      hex_to_b64(input).unwrap()
+  }
+#+end_src
+
+You can play around with the result of above code.
+
+#+begin_export html
+<play-function
+  fn="cryptopals.hex_to_b64_web"
+  display-name="hex_to_b64"
+  error-message="Input is not a valid HEX encoded string"
+/>
+#+end_export
+
+Entering the test string given in the [[https://cryptopals.com/sets/1/challenges/1][challenge]] produce the expected
+output.
+
+But let's go a step further and write a test! One of the things I like
+about rust is how easy it makes to write tests. We can drop the
+following snippet in the same file and =cargo test= will run it. The
+lack of friction makes for a great developer experience, for which I
+am a sucker.
+
+#+begin_src rust 
+  #[cfg(test)]
+  mod tests {
+      use super::*;
+
+      #[test]
+      fn s1e1_hex_to_b64() {
+	  let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+	  let output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
+
+	  assert_eq!(hex_to_b64(input).unwrap(), output);
+      }
+  }
+#+end_src

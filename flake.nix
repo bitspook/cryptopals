@@ -19,12 +19,15 @@
         buildInputs = with pkgs; [ ];
 
         nativeBuildInputs = with pkgs; [
+          nodejs-16_x
+          yarn
           nixfmt
           pkgconfig
           rust-analyzer
           cargo-edit
           cargo-audit
           cargo-outdated
+          wasm-pack
           (rust-bin.nightly.latest.default.override {
             extensions = [
               "rust-src"
@@ -34,6 +37,7 @@
               "rustfmt"
               "clippy"
             ];
+            targets = ["wasm32-unknown-unknown"];
           })
         ];
 
