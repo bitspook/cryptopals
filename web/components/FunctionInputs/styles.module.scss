@@ -1,0 +1,14 @@
+@import "~/web/scss/variables";
+
+.error {
+  color: $color-error;
+  background: $color-error-dim;
+}
+
+.inlineContainer {
+  display: flex;
+}
+
+.input {
+  flex-grow: 1;
+}

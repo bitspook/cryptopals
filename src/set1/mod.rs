@@ -1,14 +1,13 @@
 use anyhow::{bail, Error, Result};
 use std::collections::HashMap;
-use wasm_bindgen::prelude::*;
 
 use crate::text_utils::*;
 
 mod repeating_key_xor;
 
 mod challenge1;
+mod challenge2;
 
-#[wasm_bindgen]
 /// Takes two buffers `b1` and `b2` and produces their XOR
 /// combination. If the length of two buffers is not same, smaller
 /// buffer is repeated until both buffers are of same length. 

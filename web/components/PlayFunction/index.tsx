@@ -1,52 +1,81 @@
-import { useState, useCallback } from "preact/hooks";
+import { useState, useCallback, useReducer, useEffect } from "preact/hooks";
 import register from "preact-custom-element";
 
 import * as s from "./style.module.scss";
 
 import TransitionRightIcon from "~/web/components/icons/TransitionRight";
 import { getWindowProp, classnames } from "~/web/utils";
+import { renderFunctionInput } from "../FunctionInputs";
 
 const c = classnames(s);
 
 interface HexToB64Props {
   fn: string;
   displayName: string;
-  errorMessage: string;
+  errorMessage?: string;
+  args?: string;
 }
 
-const HexToB64 = ({ fn, displayName, errorMessage }: HexToB64Props) => {
+const inputsReducer = (inputs: string[], { index, value }) => {
+  const nextInputs = [...inputs];
+  nextInputs[index] = value;
+
+  return nextInputs;
+};
+
+const HexToB64 = ({
+  fn,
+  displayName,
+  errorMessage = "Invalid input",
+  args = "string",
+}: HexToB64Props) => {
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
+  const [inputs, addInput] = useReducer(inputsReducer, []);
 
-  const exec = getWindowProp(fn); // Read the function from window
+  const Args = args.split(",").map(renderFunctionInput);
 
-  const handleChangeInput = useCallback(
-    (el) => {
-      const input = el.target.value;
-      try {
-        let b64 = exec(input);
-        setOutput(b64);
-        setError("");
-      } catch (err) {
-        console.error(`Error while playing ${displayName}: `, err);
-        setOutput("");
-        setError(errorMessage);
-      }
+  const executioner = getWindowProp(fn); // Read the function from window
+
+  const handleChangeArg = useCallback(
+    (el: { target: { value: string } }, index: number) => {
+      const value = el.target.value;
+      addInput({ index, value });
     },
-    [setOutput, exec, errorMessage]
+    []
   );
 
+  useEffect(() => {
+    if (typeof executioner !== "function") {
+      return;
+    }
+
+    console.warn("Trying to eval", displayName, "with inputs: ", inputs);
+    try {
+      let output = executioner(...inputs);
+      setOutput(output);
+      setError("");
+    } catch (err) {
+      console.error(`Error while playing ${displayName}: `, err);
+      setOutput("");
+      setError(errorMessage);
+    }
+  }, [inputs, setOutput, executioner, errorMessage]);
+
   return (
-    <div className={s.container + " hljs"}>
+    <div className={s.container}>
       <div className={s.input}>
         <div className={s.preInput + " hljs-title function_"}>
-          {displayName}("
+          {displayName}(
         </div>
-        <textarea
-          onKeyup={handleChangeInput}
-          placeholder="Enter HEX input here"
-        ></textarea>
-        <div className={s.postInput + " hljs-title function_"}>")</div>
+        {Args.map((Arg, index) => (
+          <Arg
+            onChange={handleChangeArg}
+            index={index}
+            maxIndex={Args.length - 1}
+          />
+        ))}
+        <div className={s.postInput + " hljs-title function_"}>)</div>
       </div>
 
       <TransitionRightIcon
@@ -71,6 +100,11 @@ const HexToB64 = ({ fn, displayName, errorMessage }: HexToB64Props) => {
   );
 };
 
-register(HexToB64, "play-function", ["fn", "display-name", "error-message"]);
+register(HexToB64, "play-function", [
+  "fn",
+  "display-name",
+  "error-message",
+  "args",
+]);
 
 export default HexToB64;

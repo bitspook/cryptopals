@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-12-21 Tue 21:35 -->
+<!-- 2021-12-22 Wed 14:39 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cryptopals</title>
@@ -115,13 +115,96 @@ lack of friction makes for a great developer experience.
 <div id="outline-container-orgcd6ce0e" class="outline-3">
 <h3 id="orgcd6ce0e">Challenge 2: Fixed XOR</h3>
 <div class="outline-text-3" id="text-orgcd6ce0e">
+<p>
+Next challenge is not particularly challenging either. We are given
+two strings of equal length, and we have to perform XOR bitwise
+operation on them. We can simply use rust's <code>^</code> operator, which does
+exactly that.
+</p>
+
+<p>
+But, this time let's tart with writing tests first.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-rust"><span class="hljs-preprocessor">#[cfg(test)]</span>
+<span class="hljs-keyword">mod</span> <span class="hljs-constant">tests</span> {
+    <span class="hljs-keyword">use</span> <span class="hljs-keyword">super</span>::*;
+
+    <span class="hljs-preprocessor">#[test]</span>
+    <span class="hljs-keyword">fn</span> <span class="hljs-function-name">test_xor</span>() {
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">b1</span> = <span class="hljs-constant">hex</span>::decode(<span class="hljs-string">"1c0111001f010100061a024b53535009181c"</span>).unwrap();
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">b2</span> = <span class="hljs-constant">hex</span>::decode(<span class="hljs-string">"686974207468652062756c6c277320657965"</span>).unwrap();
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">expected</span> = <span class="hljs-string">"746865206b696420646f6e277420706c6179"</span>;
+
+        <span class="hljs-preprocessor">assert_eq!</span>(xor(&amp;b1, &amp;b2), <span class="hljs-constant">hex</span>::decode(expected).unwrap());
+    }
+
+    <span class="hljs-preprocessor">#[test]</span>
+    <span class="hljs-keyword">fn</span> <span class="hljs-function-name">test_hexor</span>() {
+        <span class="hljs-preprocessor">assert_eq!</span>(
+            hexor(
+                <span class="hljs-string">"1c0111001f010100061a024b53535009181c"</span>,
+                <span class="hljs-string">"686974207468652062756c6c277320657965"</span>
+            ),
+            <span class="hljs-string">"746865206b696420646f6e277420706c6179"</span>
+        )
+    }
+}
+</pre>
+</div>
+
+<p>
+We are given two hex encoded strings, which we'll first decode. In the
+first challenge, it was recommended that we should work directly with
+bytes when we can; instead of any encoded form of strings. So we'll
+write our <code>xor</code> function to accept references to byte arrays (<code>u8</code> is
+one byte), and return a new byte array with every byte of one buffer
+XOR'd against that of second.
+</p>
+
+<p>
+But I am not sure how to use <code>&amp;[u8]</code> in Javascript, and I am not
+willing to put time in this right now (I am side-questing a lot
+already), so we'll also create a helper which can work directly with
+strings. We'll call it <code>hexor</code> to put emphasis on the fact that its
+input strings are hex encoded.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">xor</span>(<span class="hljs-variable-name">b1</span>: &amp;[<span class="hljs-type">u8</span>], <span class="hljs-variable-name">b2</span>: &amp;[<span class="hljs-type">u8</span>]) -&gt; <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt; {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> <span class="hljs-variable-name">result</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt; = <span class="hljs-preprocessor">vec!</span>[];
+
+    <span class="hljs-keyword">for</span> <span class="hljs-variable-name">i</span> <span class="hljs-keyword">in</span> 0..b1.len() {
+        result.push(b1[i] ^ b2[i]);
+    }
+
+    result
+}
+
+<span class="hljs-preprocessor">#[wasm_bindgen]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">hexor</span>(<span class="hljs-variable-name">s1</span>: &amp;<span class="hljs-type">str</span>, <span class="hljs-variable-name">s2</span>: &amp;<span class="hljs-type">str</span>) -&gt; <span class="hljs-type">String</span> {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable-name">b1</span> = <span class="hljs-constant">hex</span>::decode(s1).unwrap();
+    <span class="hljs-keyword">let</span> <span class="hljs-variable-name">b2</span> = <span class="hljs-constant">hex</span>::decode(s2).unwrap();
+
+    <span class="hljs-constant">hex</span>::encode(xor(&amp;b1, &amp;b2))
+}
+</pre>
+</div>
+
+<play-function
+  fn="cryptopals.hexor"
+  display-name="hexor"
+  error-message="Both arguments must be value hex encoded strings"
+  args="string, string"
+  ></play-function>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Charanjit Singh</p>
-<p class="date">Created: 2021-12-21 Tue 21:35</p>
+<p class="date">Created: 2021-12-22 Wed 14:39</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.0.50 (<a href="https://orgmode.org">Org</a> mode 9.5.1)</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
