@@ -21,3 +21,30 @@ body {
     margin: 0;
   }
 }
+
+.reveal {
+  font-size: 1.8rem;
+  text-decoration: underline;
+  margin: 1.2rem 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &.revealed {
+    &::after {
+      transform: rotate(90deg);
+    }
+  }
+
+  &::after {
+    content: "";
+    height: 2rem;
+    width: 2rem;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktY2FyZXQtcmlnaHQtZmlsbCIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJtMTIuMTQgOC43NTMtNS40ODIgNC43OTZjLS42NDYuNTY2LTEuNjU4LjEwNi0xLjY1OC0uNzUzVjMuMjA0YTEgMSAwIDAgMSAxLjY1OS0uNzUzbDUuNDggNC43OTZhMSAxIDAgMCAxIDAgMS41MDZ6Ii8+Cjwvc3ZnPg==");
+    background-repeat: no-repeat
+  }
+}
+
+.collapsed {
+  display: none;
+}

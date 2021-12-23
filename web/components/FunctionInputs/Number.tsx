@@ -5,36 +5,32 @@ interface Props {
   placeholder?: string;
   index: number;
   maxIndex: number;
-  onChange: (value: string, index: number) => void;
+  onChange: (value: number, index: number) => void;
 }
 
-const FunctionInputString = ({
+const FunctionInputNumber = ({
   onChange,
   index,
   maxIndex,
-  placeholder = "Enter string",
+  placeholder = "Enter a number",
 }: Props) => {
   const handleChange = useCallback(
     (e) => {
-      onChange(e.target.value, index);
+      onChange(Number(e.target.value), index);
     },
     [onChange]
   );
 
   return (
     <div className={s.inlineContainer}>
-      <span className="hljs-title function_">"</span>
       <input
-        type="text"
+        type="number"
         className={s.input}
         onKeyup={handleChange}
         placeholder={placeholder}
       ></input>
-      <span className="hljs-title function_">
-        "{index !== maxIndex ? "," : null}
-      </span>
     </div>
   );
 };
 
-export default FunctionInputString;
+export default FunctionInputNumber;

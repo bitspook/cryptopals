@@ -7,6 +7,7 @@ mod repeating_key_xor;
 
 mod challenge1;
 mod challenge2;
+mod challenge3;
 
 /// Takes two buffers `b1` and `b2` and produces their XOR
 /// combination. If the length of two buffers is not same, smaller
@@ -126,7 +127,6 @@ mod tests {
         let key = 88;
         let solution = crack_single_byte_xor_cipher(&input);
         let solution_has_key = solution.into_iter().any(|(k, _)| k == key);
-        println!("SAY SOMETHING");
 
         assert!(solution_has_key);
     }

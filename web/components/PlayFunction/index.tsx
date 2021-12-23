@@ -37,13 +37,9 @@ const HexToB64 = ({
 
   const executioner = getWindowProp(fn); // Read the function from window
 
-  const handleChangeArg = useCallback(
-    (el: { target: { value: string } }, index: number) => {
-      const value = el.target.value;
-      addInput({ index, value });
-    },
-    []
-  );
+  const handleChangeArg = useCallback((value: any, index: number) => {
+    addInput({ index, value });
+  }, []);
 
   useEffect(() => {
     if (typeof executioner !== "function") {
