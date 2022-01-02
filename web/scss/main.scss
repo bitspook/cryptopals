@@ -1,3 +1,4 @@
+@import './fonts';
 @import './variables';
 @import '../../node_modules/sakura.css/scss/main';
 
@@ -5,25 +6,68 @@
   box-sizing: border-box; 
 }
 
+html {
+  font-size: 17px;
+}
+
 body {
-  max-width: 100rem;
+  max-width: 1400px;
+  font-size: 1.4rem;
+}
+
+// Typography from https://book-of-gehn.github.io
+h1 {
+  font-weight: 400;
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+  font-size: 3.2rem;
+  line-height: 1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+
+h2, h3, h4, h5, h6 {
+  font-style: italic;
+  font-weight: 400;
+  margin-top: 4.1rem;
+  margin-bottom: 0;
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+h3 {
+  font-size: 1.8rem;
+  margin-top: 2rem;
+}
+
+h4, h5, h6 {
+  font-size: 1.7rem;
+}
+
+p, li {
+  margin-top: 1.4rem;
+  line-height: 2rem;
+}
+
+p, ol, ul {
+  font-size: 1.4rem;
 }
 
 .src, pre {
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 #postamble {
-  font-size: 1.4rem;
-  line-height: 1.3;
-
   p {
+    font-size: 1rem;
+    line-height: 1.3;
     margin: 0;
   }
 }
 
 .reveal {
-  font-size: 1.8rem;
   text-decoration: underline;
   margin: 1.2rem 0;
   display: flex;
@@ -41,7 +85,8 @@ body {
     height: 2rem;
     width: 2rem;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktY2FyZXQtcmlnaHQtZmlsbCIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJtMTIuMTQgOC43NTMtNS40ODIgNC43OTZjLS42NDYuNTY2LTEuNjU4LjEwNi0xLjY1OC0uNzUzVjMuMjA0YTEgMSAwIDAgMSAxLjY1OS0uNzUzbDUuNDggNC43OTZhMSAxIDAgMCAxIDAgMS41MDZ6Ii8+Cjwvc3ZnPg==");
-    background-repeat: no-repeat
+    background-repeat: no-repeat;
+    background-position: center;
   }
 }
 

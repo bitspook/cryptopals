@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-01-02 Sun 22:57 -->
+<!-- 2022-01-03 Mon 00:15 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cryptopals</title>
@@ -19,10 +19,10 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orga0e1bf5">Set 1</a>
+<li><a href="#org166370a">Set 1</a>
 <ul>
-<li><a href="#orgbb9afe3">Challenge 1: Convert Hex to Base64</a></li>
-<li><a href="#orge8ec9cc">Challenge 2: Fixed XOR</a></li>
+<li><a href="#orgaa4fdc7">Challenge 1: Convert Hex to Base64</a></li>
+<li><a href="#org35ef9a2">Challenge 2: Fixed XOR</a></li>
 <li><a href="#orgb3293d6">Challenge 3: Single-byte XOR cipher</a></li>
 </ul>
 </li>
@@ -43,13 +43,13 @@ anything; be vigilant about mistakes and misstatements.
 </p>
 </blockquote>
 
-<div id="outline-container-orga0e1bf5" class="outline-2">
-<h2 id="orga0e1bf5">Set 1</h2>
-<div class="outline-text-2" id="text-orga0e1bf5">
+<div id="outline-container-org166370a" class="outline-2">
+<h2 id="org166370a">Set 1</h2>
+<div class="outline-text-2" id="text-org166370a">
 </div>
-<div id="outline-container-orgbb9afe3" class="outline-3">
-<h3 id="orgbb9afe3">Challenge 1: Convert Hex to Base64</h3>
-<div class="outline-text-3" id="text-orgbb9afe3">
+<div id="outline-container-orgaa4fdc7" class="outline-3">
+<h3 id="orgaa4fdc7">Challenge 1: Convert Hex to Base64</h3>
+<div class="outline-text-3" id="text-orgaa4fdc7">
 <p>
 First challenge is straightforward enough, we are given a HEX encoded
 string, and we have to encode it to base64 instead. I decided to not
@@ -113,9 +113,9 @@ lack of friction makes for a great developer experience.
 </div>
 </div>
 
-<div id="outline-container-orge8ec9cc" class="outline-3">
-<h3 id="orge8ec9cc">Challenge 2: Fixed XOR</h3>
-<div class="outline-text-3" id="text-orge8ec9cc">
+<div id="outline-container-org35ef9a2" class="outline-3">
+<h3 id="org35ef9a2">Challenge 2: Fixed XOR</h3>
+<div class="outline-text-3" id="text-org35ef9a2">
 <p>
 Next challenge is not particularly challenging either. We are given
 two strings of equal length, and we have to perform XOR bitwise
@@ -205,6 +205,10 @@ input strings are hex encoded.
 <div id="outline-container-orgb3293d6" class="outline-3">
 <h3 id="orgb3293d6">Challenge 3: Single-byte XOR cipher</h3>
 <div class="outline-text-3" id="text-orgb3293d6">
+<script type="text/javascript">
+  const hexedCipher = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
+</script>
+
 <p>
 This is the challenge that put me on the quest of solving
 cryptopals. I encountered a version of this exercise while trying to
@@ -412,10 +416,10 @@ the letter frequency of the given string is when compared with the
 
     <span class="hljs-preprocessor">#[test]</span>
     <span class="hljs-keyword">fn</span> <span class="hljs-function-name">test_letter_frequency_error</span>() {
-        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">input</span> = <span class="hljs-string">"Hello world how do you do."</span>;
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">input</span> = <span class="hljs-string">"She sells sea shells at the sea shore. Shells are blue and they are white, ocean is blue and it is bright."</span>;
         <span class="hljs-keyword">let</span> <span class="hljs-variable-name">error_till_2dec</span> = (letter_frequency_error(input) * 100.0).trunc() / 100.0;
 
-        <span class="hljs-preprocessor">assert_eq!</span>(error_till_2dec, 0.0);
+        <span class="hljs-preprocessor">assert_eq!</span>(error_till_2dec, 0.26);
     }
 }
 </pre>
@@ -474,9 +478,10 @@ approach produces any good results.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-type">Crack</span> {
+<pre class="src src-rust"><span class="hljs-preprocessor">#[derive(Serialize, Deserialize)]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-type">Crack</span> {
     <span class="hljs-variable-name">key</span>: <span class="hljs-type">String</span>,
-    <span class="hljs-variable-name">plain_text</span>: <span class="hljs-type">String</span>
+    <span class="hljs-variable-name">plain_text</span>: <span class="hljs-type">String</span>,
 }
 
 <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">crack_single_key_xor_cipher</span>(<span class="hljs-variable-name">hexedCipher</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">Crack</span> {
@@ -487,10 +492,6 @@ approach produces any good results.
         <span class="hljs-keyword">let</span> <span class="hljs-variable-name">result</span> = xor(<span class="hljs-rust-ampersand">&amp;</span>cipher, <span class="hljs-rust-ampersand">&amp;</span>repeated_key);
 
         <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-type">Ok</span>(result) = <span class="hljs-constant">std</span>::<span class="hljs-type">str</span>::from_utf8(<span class="hljs-rust-ampersand">&amp;</span>result) {
-            <span class="hljs-keyword">if</span> !has_valid_ascii_chars(result) {
-                <span class="hljs-keyword">continue</span>;
-            }
-
             <span class="hljs-keyword">let</span> <span class="hljs-variable-name">lfe</span> = letter_frequency_error(result);
 
             <span class="hljs-keyword">if</span> lfe &lt; solution.2 {
@@ -515,11 +516,11 @@ simple:
 
 <ol class="org-ol">
 <li>For every <code>key</code> from 1 to 255, i.e ASCII range
-<ol class="org-ol">
+<ul class="org-ul">
 <li><code>xor</code> the cipher with <code>key</code></li>
 <li>Try converting it to utf8 <code>plain_text</code></li>
 <li>Find <code>letter_frequency_error</code> of <code>plain_text</code></li>
-</ol></li>
+</ul></li>
 <li><code>plain_text</code> with smallest <code>letter_frequency_error</code> is the solution</li>
 </ol>
 
@@ -528,11 +529,12 @@ But is it? Let's play around with this function and see if it can
 crack the cipher given in cryptopals challenge.
 </p>
 
-<div class="reveal" data-reveal="crack-single-key-xor-cipher">Some glue code for web.</div>
+<div class="reveal" data-reveal="crack-single-key-xor-cipher-glue">Some glue code for web.</div>
 
 <div class="crack-single-key-xor-cipher-glue" ><div class="org-src-container">
-<pre class="src src-rust"><span class="hljs-keyword">impl</span> <span class="hljs-type">Crack</span> {
-
+<pre class="src src-rust"><span class="hljs-preprocessor">#[wasm_bindgen]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">crack_single_key_xor_cipher_web</span>(<span class="hljs-variable-name">hexedCipher</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">JsValue</span> {
+    <span class="hljs-type">JsValue</span>::from_serde(<span class="hljs-rust-ampersand">&amp;</span>crack_single_key_xor_cipher(hexedCipher)).unwrap()
 }
 </pre>
 </div></div>
@@ -542,7 +544,7 @@ crack the cipher given in cryptopals challenge.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Charanjit Singh</p>
-<p class="date">Created: 2022-01-02 Sun 22:57</p>
+<p class="date">Created: 2022-01-03 Mon 00:15</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.0.50 (<a href="https://orgmode.org">Org</a> mode 9.5.2)</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
