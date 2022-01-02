@@ -1,5 +1,6 @@
 // [[file:../../readme.org::*Challenge 3: Single-byte XOR cipher][Challenge 3: Single-byte XOR cipher:1]]
 use std::collections::HashMap;
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 use super::challenge2::xor;
@@ -86,10 +87,10 @@ mod lfe_tests {
 
     #[test]
     fn test_letter_frequency_error() {
-        let input = "Hello world how do you do.";
+        let input = "She sells sea shells at the sea shore. Shells are blue and they are white, ocean is blue and it is bright.";
         let error_till_2dec = (letter_frequency_error(input) * 100.0).trunc() / 100.0;
 
-        assert_eq!(error_till_2dec, 0.0);
+        assert_eq!(error_till_2dec, 0.26);
     }
 }
 // Challenge 3: Single-byte XOR cipher:7 ends here
@@ -129,7 +130,7 @@ pub fn letter_frequency_error(input: &str) -> f64 {
     let mut freq_sum: f64 = 0.0;
 
     for (letter, s_freq) in &standard_freq {
-	let freq = letter_freq.get(letter).unwrap_or(&0.0);
+        let freq = letter_freq.get(letter).unwrap_or(&0.0);
         let freq_diff = *freq - *s_freq;
         freq_sum += freq_diff * freq_diff;
     }
@@ -139,45 +140,12 @@ pub fn letter_frequency_error(input: &str) -> f64 {
 // Challenge 3: Single-byte XOR cipher:8 ends here
 
 // [[file:../../readme.org::*Challenge 3: Single-byte XOR cipher][Challenge 3: Single-byte XOR cipher:9]]
-#[cfg(test)]
-mod cskc_test {
-    
-}
-
-
-#[wasm_bindgen]
+#[derive(Serialize, Deserialize)]
 pub struct Crack {
-    pub key: u8,
-    #[wasm_bindgen(skip)]
-    pub plain_text: String,
+    key: String,
+    plain_text: String,
 }
 
-#[wasm_bindgen]
-impl Crack {
-    #[wasm_bindgen(getter)]
-    pub fn sol_key(self) -> u8 {
-        self.key
-    }
-
-    #[wasm_bindgen(getter)]
-    pub fn solution(self) -> String {
-        self.plain_text
-    }
-}
-
-fn has_valid_ascii_chars(sentence: &str) -> bool {
-    sentence
-        .chars()
-        .all(|c| c.is_ascii_alphanumeric() || c.is_ascii_punctuation() || c.is_whitespace())
-}
-
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
-
-#[wasm_bindgen]
 pub fn crack_single_key_xor_cipher(hexedCipher: &str) -> Crack {
     let mut solution: (u8, String, f64) = (0, "".to_string(), 99.0);
     for key in 1..255 {
@@ -186,13 +154,7 @@ pub fn crack_single_key_xor_cipher(hexedCipher: &str) -> Crack {
         let result = xor(&cipher, &repeated_key);
 
         if let Ok(result) = std::str::from_utf8(&result) {
-            if !has_valid_ascii_chars(result) {
-                continue;
-            }
-
             let lfe = letter_frequency_error(result);
-
-	    log(&format!("Text: {}, key: {}, lfe: {}", result, key,lfe));
 
             if lfe < solution.2 {
                 solution = (key, result.to_string(), lfe);
@@ -201,8 +163,23 @@ pub fn crack_single_key_xor_cipher(hexedCipher: &str) -> Crack {
     }
 
     Crack {
-        key: solution.0,
+        key: solution.0.to_string(),
         plain_text: solution.1,
     }
 }
 // Challenge 3: Single-byte XOR cipher:9 ends here
+
+// [[file:../../readme.org::*Challenge 3: Single-byte XOR cipher][Challenge 3: Single-byte XOR cipher:10]]
+#[wasm_bindgen]
+pub fn crack_single_key_xor_cipher_web(hexedCipher: &str) -> JsValue {
+    JsValue::from_serde(&crack_single_key_xor_cipher(hexedCipher)).unwrap()
+}
+// Challenge 3: Single-byte XOR cipher:10 ends here
+
+// [[file:../../readme.org::*Challenge 3: Single-byte XOR cipher][Challenge 3: Single-byte XOR cipher:11]]
+fn has_valid_ascii_chars(sentence: &str) -> bool {
+    sentence
+        .chars()
+        .all(|c| c.is_ascii_alphanumeric() || c.is_ascii_punctuation() || c.is_whitespace())
+}
+// Challenge 3: Single-byte XOR cipher:11 ends here

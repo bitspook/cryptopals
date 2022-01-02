@@ -6,4 +6,5 @@
 					      :base-exteinsion "org"
 					      :publishing-directory "./web"
 					      :publishing-function org-html-publish-to-html
-					      :auto-preamble t))))))
+					      :auto-preamble t)))
+              (eval add-hook 'after-save-hook #'org-publish-current-project))))

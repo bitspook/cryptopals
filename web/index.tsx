@@ -1,7 +1,12 @@
 import "highlight.js/styles/stackoverflow-light.css";
+import { Runtime, Inspector } from "@observablehq/runtime";
+import "@observablehq/inspector/dist/inspector.css";
 
 import init, * as cryptopals from "~/pkg/cryptopals";
 import "./components/PlayFunction";
+
+// @ts-ignore - otherwise it give warning about import.meta
+const athletes = new URL("./athletes.csv", import.meta.url);
 
 const setupCollapsibleBlocks = () => {
   document.querySelectorAll(".reveal").forEach((el) => {
@@ -30,6 +35,35 @@ const setupCollapsibleBlocks = () => {
   });
 };
 
+const independentNb = () => {
+  const runtime = new Runtime();
+
+  const main = runtime.module();
+  const inspector = new Inspector(document.getElementById("notebook"));
+  const fileAttachments = new Map([["athletes.csv", athletes]]);
+
+  main.builtin(
+    "Attachment",
+    runtime.fileAttachments((name) => fileAttachments.get(name))
+  );
+
+  main.variable(inspector).define("title", ["html"], function (html) {
+    return html`<h1>HELLO FROM HTML</h1>`;
+  });
+
+  main
+    .variable(inspector)
+    .define("athletes", ["Attachment"], function (FileAttachment) {
+      return FileAttachment("athletes.csv").csv({ typed: true });
+    });
+
+  main.variable(inspector).define(["dotplot"], function (dotplot) {
+    return dotplot.legend("color");
+  });
+};
+
+const runObservableNb = () => {};
+
 const run = async () => {
   try {
     await init();
@@ -40,6 +74,8 @@ const run = async () => {
   }
 
   setupCollapsibleBlocks();
+
+  runObservableNb();
 };
 
 run();

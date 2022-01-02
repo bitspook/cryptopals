@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-12-23 Thu 18:34 -->
+<!-- 2022-01-02 Sun 22:57 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cryptopals</title>
@@ -19,11 +19,11 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgcfc7c90">Set 1</a>
+<li><a href="#orga0e1bf5">Set 1</a>
 <ul>
-<li><a href="#org88f8901">Challenge 1: Convert Hex to Base64</a></li>
-<li><a href="#org593684c">Challenge 2: Fixed XOR</a></li>
-<li><a href="#org79a6826">Challenge 3: Single-byte XOR cipher</a></li>
+<li><a href="#orgbb9afe3">Challenge 1: Convert Hex to Base64</a></li>
+<li><a href="#orge8ec9cc">Challenge 2: Fixed XOR</a></li>
+<li><a href="#orgb3293d6">Challenge 3: Single-byte XOR cipher</a></li>
 </ul>
 </li>
 </ul>
@@ -43,13 +43,13 @@ anything; be vigilant about mistakes and misstatements.
 </p>
 </blockquote>
 
-<div id="outline-container-orgcfc7c90" class="outline-2">
-<h2 id="orgcfc7c90">Set 1</h2>
-<div class="outline-text-2" id="text-orgcfc7c90">
+<div id="outline-container-orga0e1bf5" class="outline-2">
+<h2 id="orga0e1bf5">Set 1</h2>
+<div class="outline-text-2" id="text-orga0e1bf5">
 </div>
-<div id="outline-container-org88f8901" class="outline-3">
-<h3 id="org88f8901">Challenge 1: Convert Hex to Base64</h3>
-<div class="outline-text-3" id="text-org88f8901">
+<div id="outline-container-orgbb9afe3" class="outline-3">
+<h3 id="orgbb9afe3">Challenge 1: Convert Hex to Base64</h3>
+<div class="outline-text-3" id="text-orgbb9afe3">
 <p>
 First challenge is straightforward enough, we are given a HEX encoded
 string, and we have to encode it to base64 instead. I decided to not
@@ -58,7 +58,7 @@ encoding/decoding to/from hex/base64.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">hex_to_b64</span>(<span class="hljs-variable-name">input</span>: &amp;<span class="hljs-type">str</span>) -&gt; <span class="hljs-type">Result</span>&lt;<span class="hljs-type">String</span>&gt; {
+<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">hex_to_b64</span>(<span class="hljs-variable-name">input</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">Result</span>&lt;<span class="hljs-type">String</span>&gt; {
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">hex_str</span> = <span class="hljs-constant">hex</span>::decode(input).map_err(<span class="hljs-type">Error</span>::from)<span class="hljs-rust-question-mark">?</span>;
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">out</span> = <span class="hljs-constant">base64</span>::encode(hex_str);
 
@@ -113,9 +113,9 @@ lack of friction makes for a great developer experience.
 </div>
 </div>
 
-<div id="outline-container-org593684c" class="outline-3">
-<h3 id="org593684c">Challenge 2: Fixed XOR</h3>
-<div class="outline-text-3" id="text-org593684c">
+<div id="outline-container-orge8ec9cc" class="outline-3">
+<h3 id="orge8ec9cc">Challenge 2: Fixed XOR</h3>
+<div class="outline-text-3" id="text-orge8ec9cc">
 <p>
 Next challenge is not particularly challenging either. We are given
 two strings of equal length, and we have to perform XOR bitwise
@@ -138,7 +138,7 @@ But, this time let's tart with writing tests first.
         <span class="hljs-keyword">let</span> <span class="hljs-variable-name">b2</span> = <span class="hljs-constant">hex</span>::decode(<span class="hljs-string">"686974207468652062756c6c277320657965"</span>).unwrap();
         <span class="hljs-keyword">let</span> <span class="hljs-variable-name">expected</span> = <span class="hljs-string">"746865206b696420646f6e277420706c6179"</span>;
 
-        <span class="hljs-preprocessor">assert_eq!</span>(xor(&amp;b1, &amp;b2), <span class="hljs-constant">hex</span>::decode(expected).unwrap());
+        <span class="hljs-preprocessor">assert_eq!</span>(xor(<span class="hljs-rust-ampersand">&amp;</span>b1, <span class="hljs-rust-ampersand">&amp;</span>b2), <span class="hljs-constant">hex</span>::decode(expected).unwrap());
     }
 
     <span class="hljs-preprocessor">#[test]</span>
@@ -184,11 +184,11 @@ input strings are hex encoded.
 }
 
 <span class="hljs-preprocessor">#[wasm_bindgen]</span>
-<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">hexor</span>(<span class="hljs-variable-name">s1</span>: &amp;<span class="hljs-type">str</span>, <span class="hljs-variable-name">s2</span>: &amp;<span class="hljs-type">str</span>) -&gt; <span class="hljs-type">String</span> {
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">hexor</span>(<span class="hljs-variable-name">s1</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>, <span class="hljs-variable-name">s2</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">String</span> {
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">b1</span> = <span class="hljs-constant">hex</span>::decode(s1).unwrap();
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">b2</span> = <span class="hljs-constant">hex</span>::decode(s2).unwrap();
 
-    <span class="hljs-constant">hex</span>::encode(xor(&amp;b1, &amp;b2))
+    <span class="hljs-constant">hex</span>::encode(xor(<span class="hljs-rust-ampersand">&amp;</span>b1, <span class="hljs-rust-ampersand">&amp;</span>b2))
 }
 </pre>
 </div>
@@ -202,9 +202,9 @@ input strings are hex encoded.
 </div>
 </div>
 
-<div id="outline-container-org79a6826" class="outline-3">
-<h3 id="org79a6826">Challenge 3: Single-byte XOR cipher</h3>
-<div class="outline-text-3" id="text-org79a6826">
+<div id="outline-container-orgb3293d6" class="outline-3">
+<h3 id="orgb3293d6">Challenge 3: Single-byte XOR cipher</h3>
+<div class="outline-text-3" id="text-orgb3293d6">
 <p>
 This is the challenge that put me on the quest of solving
 cryptopals. I encountered a version of this exercise while trying to
@@ -225,7 +225,7 @@ see which one decrypts the cipher. The latter is the hard part.
 </p>
 
 <p>
-How can we tell if decryption was successful? 
+How can we tell if decryption was successful?
 </p>
 
 <ol class="org-ol">
@@ -292,12 +292,12 @@ do so right in the browser.</div>
 
 <div class="fixed-key-xor" ><div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-preprocessor">#[wasm_bindgen]</span>
-<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">fixed_key_xor</span>(<span class="hljs-variable-name">hexedCipher</span>: &amp;<span class="hljs-type">str</span>, <span class="hljs-variable-name">key</span>: <span class="hljs-type">u8</span>) -&gt; <span class="hljs-type">String</span> {
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">fixed_key_xor</span>(<span class="hljs-variable-name">hexedCipher</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>, <span class="hljs-variable-name">key</span>: <span class="hljs-type">u8</span>) -&gt; <span class="hljs-type">String</span> {
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">cipher</span> = <span class="hljs-constant">hex</span>::decode(hexedCipher).unwrap();
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">repeated_key</span> = repeat_till(&amp;[key], cipher.len());
-    <span class="hljs-keyword">let</span> <span class="hljs-variable-name">result</span> = xor(&amp;cipher, &amp;repeated_key);
+    <span class="hljs-keyword">let</span> <span class="hljs-variable-name">result</span> = xor(<span class="hljs-rust-ampersand">&amp;</span>cipher, <span class="hljs-rust-ampersand">&amp;</span>repeated_key);
 
-    <span class="hljs-constant">std</span>::<span class="hljs-type">str</span>::from_utf8(&amp;result)
+    <span class="hljs-constant">std</span>::<span class="hljs-type">str</span>::from_utf8(<span class="hljs-rust-ampersand">&amp;</span>result)
         .expect(<span class="hljs-string">"Invalid utf8 chars in string"</span>)
         .to_string()
 }
@@ -363,10 +363,10 @@ string. We'll start by writing a test:
         <span class="hljs-keyword">let</span> <span class="hljs-variable-name">input</span> = <span class="hljs-string">"aaaaccddee"</span>;
         <span class="hljs-keyword">let</span> <span class="hljs-variable-name">lf</span> = letter_frequency(input);
 
-        <span class="hljs-preprocessor">assert_eq!</span>(lf.get(&amp;<span class="hljs-string">'a'</span>), <span class="hljs-type">Some</span>(&amp;0.4));
-        <span class="hljs-preprocessor">assert_eq!</span>(lf.get(&amp;<span class="hljs-string">'c'</span>), <span class="hljs-type">Some</span>(&amp;0.2));
-        <span class="hljs-preprocessor">assert_eq!</span>(lf.get(&amp;<span class="hljs-string">'d'</span>), <span class="hljs-type">Some</span>(&amp;0.2));
-        <span class="hljs-preprocessor">assert_eq!</span>(lf.get(&amp;<span class="hljs-string">'e'</span>), <span class="hljs-type">Some</span>(&amp;0.2));
+        <span class="hljs-preprocessor">assert_eq!</span>(lf.get(<span class="hljs-rust-ampersand">&amp;</span><span class="hljs-string">'a'</span>), <span class="hljs-type">Some</span>(<span class="hljs-rust-ampersand">&amp;</span>0.4));
+        <span class="hljs-preprocessor">assert_eq!</span>(lf.get(<span class="hljs-rust-ampersand">&amp;</span><span class="hljs-string">'c'</span>), <span class="hljs-type">Some</span>(<span class="hljs-rust-ampersand">&amp;</span>0.2));
+        <span class="hljs-preprocessor">assert_eq!</span>(lf.get(<span class="hljs-rust-ampersand">&amp;</span><span class="hljs-string">'d'</span>), <span class="hljs-type">Some</span>(<span class="hljs-rust-ampersand">&amp;</span>0.2));
+        <span class="hljs-preprocessor">assert_eq!</span>(lf.get(<span class="hljs-rust-ampersand">&amp;</span><span class="hljs-string">'e'</span>), <span class="hljs-type">Some</span>(<span class="hljs-rust-ampersand">&amp;</span>0.2));
     }
 }
 </pre>
@@ -375,7 +375,7 @@ string. We'll start by writing a test:
 <div class="reveal" data-reveal="letter-frequency">And then make it pass.</div>
 
 <div class="letter-frequency" ><div class="org-src-container">
-<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">letter_frequency</span>(<span class="hljs-variable-name">input</span>: &amp;<span class="hljs-type">str</span>) -&gt; <span class="hljs-type">HashMap</span>&lt;<span class="hljs-type">char</span>, <span class="hljs-type">f64</span>&gt; {
+<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">letter_frequency</span>(<span class="hljs-variable-name">input</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">HashMap</span>&lt;<span class="hljs-type">char</span>, <span class="hljs-type">f64</span>&gt; {
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> <span class="hljs-variable-name">lf</span> = <span class="hljs-type">HashMap</span>::new();
 
     <span class="hljs-keyword">for</span> <span class="hljs-variable-name">c</span> <span class="hljs-keyword">in</span> input.chars() {
@@ -424,7 +424,8 @@ the letter frequency of the given string is when compared with the
 <div class="reveal" data-reveal="letter-frequency-error">Reveal Solution</div>
 
 <div class="letter-frequency-error" ><div class="org-src-container">
-<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">letter_frequency_error</span>(<span class="hljs-variable-name">input</span>: &amp;<span class="hljs-type">str</span>) -&gt; <span class="hljs-type">f64</span> {
+<pre class="src src-rust"><span class="hljs-preprocessor">#[wasm_bindgen]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">letter_frequency_error</span>(<span class="hljs-variable-name">input</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">f64</span> {
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">standard_freq</span> = <span class="hljs-type">HashMap</span>::from([
         (<span class="hljs-string">'a'</span>, 0.08167),
         (<span class="hljs-string">'b'</span>, 0.01492),
@@ -456,14 +457,82 @@ the letter frequency of the given string is when compared with the
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">letter_freq</span> = letter_frequency(input);
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> <span class="hljs-variable-name">freq_sum</span>: <span class="hljs-type">f64</span> = 0.0;
 
-    <span class="hljs-keyword">for</span> (letter, freq) <span class="hljs-keyword">in</span> &amp;letter_freq {
-        <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-type">Some</span>(s_freq) = standard_freq.get(letter) {
-            <span class="hljs-keyword">let</span> <span class="hljs-variable-name">freq_diff</span> = *freq - *s_freq;
-            freq_sum += freq_diff * freq_diff;
+    <span class="hljs-keyword">for</span> (letter, s_freq) <span class="hljs-keyword">in</span> <span class="hljs-rust-ampersand">&amp;</span>standard_freq {
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">freq</span> = letter_freq.get(letter).unwrap_or(<span class="hljs-rust-ampersand">&amp;</span>0.0);
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">freq_diff</span> = *freq - *s_freq;
+        freq_sum += freq_diff * freq_diff;
+    }
+
+    (freq_sum / letter_freq.len() <span class="hljs-keyword">as</span> <span class="hljs-type">f64</span>) * 100.0
+}
+</pre>
+</div></div>
+
+<p>
+Looks like we have all the pieces. Time to connect them and see if our
+approach produces any good results.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-type">Crack</span> {
+    <span class="hljs-variable-name">key</span>: <span class="hljs-type">String</span>,
+    <span class="hljs-variable-name">plain_text</span>: <span class="hljs-type">String</span>
+}
+
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">crack_single_key_xor_cipher</span>(<span class="hljs-variable-name">hexedCipher</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">Crack</span> {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> <span class="hljs-variable-name">solution</span>: (<span class="hljs-type">u8</span>, <span class="hljs-type">String</span>, <span class="hljs-type">f64</span>) = (0, <span class="hljs-string">""</span>.to_string(), 99.0);
+    <span class="hljs-keyword">for</span> <span class="hljs-variable-name">key</span> <span class="hljs-keyword">in</span> 1..255 {
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">cipher</span> = <span class="hljs-constant">hex</span>::decode(hexedCipher).unwrap();
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">repeated_key</span> = repeat_till(&amp;[key], cipher.len());
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">result</span> = xor(<span class="hljs-rust-ampersand">&amp;</span>cipher, <span class="hljs-rust-ampersand">&amp;</span>repeated_key);
+
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-type">Ok</span>(result) = <span class="hljs-constant">std</span>::<span class="hljs-type">str</span>::from_utf8(<span class="hljs-rust-ampersand">&amp;</span>result) {
+            <span class="hljs-keyword">if</span> !has_valid_ascii_chars(result) {
+                <span class="hljs-keyword">continue</span>;
+            }
+
+            <span class="hljs-keyword">let</span> <span class="hljs-variable-name">lfe</span> = letter_frequency_error(result);
+
+            <span class="hljs-keyword">if</span> lfe &lt; solution.2 {
+                solution = (key, result.to_string(), lfe);
+            }
         }
     }
 
-    freq_sum / letter_freq.len() <span class="hljs-keyword">as</span> <span class="hljs-type">f64</span>
+    <span class="hljs-type">Crack</span> {
+        <span class="hljs-variable-name">key</span>: solution.0.to_string(),
+        <span class="hljs-variable-name">plain_text</span>: solution.1,
+    }
+}
+</pre>
+</div>
+
+<p>
+To make things a bit more readable, and for feel-good reasons, we've
+created a <code>Struct</code> to hold our possible solution. Our approach is
+simple:
+</p>
+
+<ol class="org-ol">
+<li>For every <code>key</code> from 1 to 255, i.e ASCII range
+<ol class="org-ol">
+<li><code>xor</code> the cipher with <code>key</code></li>
+<li>Try converting it to utf8 <code>plain_text</code></li>
+<li>Find <code>letter_frequency_error</code> of <code>plain_text</code></li>
+</ol></li>
+<li><code>plain_text</code> with smallest <code>letter_frequency_error</code> is the solution</li>
+</ol>
+
+<p>
+But is it? Let's play around with this function and see if it can
+crack the cipher given in cryptopals challenge.
+</p>
+
+<div class="reveal" data-reveal="crack-single-key-xor-cipher">Some glue code for web.</div>
+
+<div class="crack-single-key-xor-cipher-glue" ><div class="org-src-container">
+<pre class="src src-rust"><span class="hljs-keyword">impl</span> <span class="hljs-type">Crack</span> {
+
 }
 </pre>
 </div></div>
@@ -473,8 +542,8 @@ the letter frequency of the given string is when compared with the
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Charanjit Singh</p>
-<p class="date">Created: 2021-12-23 Thu 18:34</p>
-<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.0.50 (<a href="https://orgmode.org">Org</a> mode 9.5.1)</p>
+<p class="date">Created: 2022-01-02 Sun 22:57</p>
+<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.0.50 (<a href="https://orgmode.org">Org</a> mode 9.5.2)</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

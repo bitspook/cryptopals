@@ -231,6 +231,29 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@observablehq/inspector@^3.2.2":
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/@observablehq/inspector/-/inspector-3.2.4.tgz#b620af79e721ae0e26e9bc83ec6e2e26ad260880"
+  integrity sha512-P1TdR95pvvNri0XV6X/R+s9XO70d8ozhOp2cMXEJ2zsiGzB8VjOdrJgRJyLjEJ0OJy7jP9VXFiC1Hej8WgsF5A==
+  dependencies:
+    isoformat "^0.2.0"
+
+"@observablehq/runtime@^4.18.3":
+  version "4.18.3"
+  resolved "https://registry.yarnpkg.com/@observablehq/runtime/-/runtime-4.18.3.tgz#c915c572cb4ec9f112db876a83ac9f83a30208b4"
+  integrity sha512-SSJ1z3tWiBnfJIluASD0ZrP6HhUglzUpyWzjutoxVTqcZY9SrPUDiTbiA/UzX5tNkTsU/zwQ4//A0oBYcJtj3A==
+  dependencies:
+    "@observablehq/inspector" "^3.2.2"
+    "@observablehq/stdlib" "^3.4.1"
+
+"@observablehq/stdlib@^3.4.1":
+  version "3.15.3"
+  resolved "https://registry.yarnpkg.com/@observablehq/stdlib/-/stdlib-3.15.3.tgz#1562c64a923253b83407519dbe10e3e3dd913dad"
+  integrity sha512-C3nSVFZDGCA7dJmjz1HrKlcmp3EhVgDeGzZUAFnyvoahA3SgeUfgmxcbQ9yM8RrC+Rblho8rrgBXQjiswadTWw==
+  dependencies:
+    d3-dsv "^2.0.0"
+    d3-require "^1.2.4"
+
 "@parcel/babel-ast-utils@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@parcel/babel-ast-utils/-/babel-ast-utils-2.0.1.tgz#e131e74136af878e0b2355d63acf19abbe1920db"
@@ -1433,7 +1456,7 @@ command-exists@^1.2.6:
   resolved "https://registry.yarnpkg.com/command-exists/-/command-exists-1.2.9.tgz#c50725af3808c8ab0260fd60b01fbfa25b954f69"
   integrity sha512-LTQ/SGc+s0Xc0Fu5WaKnR0YiygZkm9eKFvyS+fRsU7/ZWFF8ykFM6Pc9aCVf1+xasOOZpO3BAVgVrKvsqKHV7w==
 
-commander@^2.20.0:
+commander@2, commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -1694,6 +1717,20 @@ cssstyle@^1.1.1:
   integrity sha512-GBrLZYZ4X4x6/QEoBnIrqb8B/f5l4+8me2dkom/j1Gtbxy0kBv6OGzKuAsGM75bkGwGAFkt56Iwg28S3XTZgSA==
   dependencies:
     cssom "0.3.x"
+
+d3-dsv@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/d3-dsv/-/d3-dsv-2.0.0.tgz#b37b194b6df42da513a120d913ad1be22b5fe7c5"
+  integrity sha512-E+Pn8UJYx9mViuIUkoc93gJGGYut6mSDKy2+XaPwccwkRGlR+LO97L2VCCRjQivTwLHkSnAJG7yo00BWY6QM+w==
+  dependencies:
+    commander "2"
+    iconv-lite "0.4"
+    rw "1"
+
+d3-require@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/d3-require/-/d3-require-1.2.4.tgz#59afc591d5089f99fecd8c45ef7539e1fee112b3"
+  integrity sha512-8UseEGCkBkBxIMouLMPONUBmU8DUPC1q12LARV1Lk/2Jwa32SVgmRfX8GdIeR06ZP+CG85YD3N13K2s14qCNyA==
 
 dashdash@^1.12.0:
   version "1.14.1"
@@ -2425,7 +2462,7 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-iconv-lite@0.4.24:
+iconv-lite@0.4, iconv-lite@0.4.24:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
   integrity sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==
@@ -2713,6 +2750,11 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
+
+isoformat@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/isoformat/-/isoformat-0.2.1.tgz#2526344a4276a101b2881848dc337d1d2ae74494"
+  integrity sha512-tFLRAygk9NqrRPhJSnNGh7g7oaVWDwR0wKh/GM2LgmPa50Eg4UfyaCO4I8k6EqJHl1/uh2RAD6g06n5ygEnrjQ==
 
 isstream@~0.1.2:
   version "0.1.2"
@@ -3932,6 +3974,11 @@ run-parallel@^1.1.9:
   integrity sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==
   dependencies:
     queue-microtask "^1.2.2"
+
+rw@1:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/rw/-/rw-1.3.3.tgz#3f862dfa91ab766b14885ef4d01124bfda074fb4"
+  integrity sha1-P4Yt+pGrdmsUiF700BEkv9oHT7Q=
 
 safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@^5.1.2, safe-buffer@^5.2.0, safe-buffer@~5.2.0:
   version "5.2.1"
