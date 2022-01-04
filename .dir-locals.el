@@ -7,4 +7,6 @@
 					      :publishing-directory "./web"
 					      :publishing-function org-html-publish-to-html
 					      :auto-preamble t)))
-              (eval add-hook 'after-save-hook #'org-publish-current-project))))
+              (eval (lambda ()
+                      (add-hook 'after-save-hook #'org-publish-current-project)
+                      (load-file "./orgservable.el"))))))

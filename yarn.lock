@@ -2,6 +2,14 @@
 # yarn lockfile v1
 
 
+"@alex.garcia/unofficial-observablehq-compiler@^0.6.0-alpha.9":
+  version "0.6.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/@alex.garcia/unofficial-observablehq-compiler/-/unofficial-observablehq-compiler-0.6.0-alpha.9.tgz#371807aa46a68d0e307991452e5657428d308c60"
+  integrity sha512-tm/abxm/u+w3AThAJ+YpRzurXMTDxAftPLCoj40GzspCypgK4D8HqwOmiQU4xxptWw0k0mNhGOQkzitiO2Ox9g==
+  dependencies:
+    "@observablehq/parser" "4.2"
+    acorn-walk "^7.0.0"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.16.0":
   version "7.16.0"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.16.0.tgz#0dfc80309beec8411e65e706461c408b0bb9b431"
@@ -237,6 +245,22 @@
   integrity sha512-P1TdR95pvvNri0XV6X/R+s9XO70d8ozhOp2cMXEJ2zsiGzB8VjOdrJgRJyLjEJ0OJy7jP9VXFiC1Hej8WgsF5A==
   dependencies:
     isoformat "^0.2.0"
+
+"@observablehq/parser@4.2":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@observablehq/parser/-/parser-4.2.0.tgz#74f34b4fbed4b71e54c6f97e34d9209a6a745f18"
+  integrity sha512-i1v95BrUB4urKEBIL1CEPWCU8DovxKyMlWf03pEfpOfi5/DiESQ58QRQM6Ws+Sy/nwKXnIx8IMj4kX28Bif4xQ==
+  dependencies:
+    acorn "^7.1.1"
+    acorn-walk "^7.0.0"
+
+"@observablehq/parser@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@observablehq/parser/-/parser-6.0.0.tgz#fcdc3dc41cc8bb852adca777485e26281f031215"
+  integrity sha512-iLme7/6LlyYO7Hqyi9evU47kyaFKl9deFcWROBs9cmkQuUoZ8Nr9vqRJ9Sc3QfeVvpueRZT3C/fT+jhYIeUlOw==
+  dependencies:
+    acorn "8"
+    acorn-walk "8"
 
 "@observablehq/runtime@^4.18.3":
   version "4.18.3"
@@ -965,15 +989,35 @@ acorn-globals@^4.3.0:
     acorn "^6.0.1"
     acorn-walk "^6.0.1"
 
+acorn-walk@8:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-8.2.0.tgz#741210f2e2426454508853a2f44d0ab83b7f69c1"
+  integrity sha512-k+iyHEuPgSw6SbuDpGQM+06HQUa04DZ3o+F6CSzXMvvI5KMvnaEqXe+YVe555R9nn6GPt404fos4wcgpw12SDA==
+
 acorn-walk@^6.0.1:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-6.2.0.tgz#123cb8f3b84c2171f1f7fb252615b1c78a6b1a8c"
   integrity sha512-7evsyfH1cLOCdAzZAd43Cic04yKydNx0cF+7tiA19p1XnLLPU4dpCQOqpjqwokFe//vS0QqfqqjCS2JkiIs0cA==
 
+acorn-walk@^7.0.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-7.2.0.tgz#0de889a601203909b0fbe07b8938dc21d2e967bc"
+  integrity sha512-OPdCF6GsMIP+Az+aWfAAOEt2/+iVDKE7oy6lJ098aoe59oAmK76qV6Gw60SbZ8jHuG2wH058GF4pLFbYamYrVA==
+
+acorn@8:
+  version "8.7.0"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.7.0.tgz#90951fde0f8f09df93549481e5fc141445b791cf"
+  integrity sha512-V/LGr1APy+PXIwKebEWrkZPwoeoF+w1jiOBUmuxuiUIaOHtob8Qc9BTrYo7VuI5fR8tqsy+buA2WFooR5olqvQ==
+
 acorn@^6.0.1, acorn@^6.0.4:
   version "6.4.2"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.2.tgz#35866fd710528e92de10cf06016498e47e39e1e6"
   integrity sha512-XtGIhXwF8YM8bJhGxG5kXgjkEuNGLTkoYqVE+KMR+aspr4KGYmKYg7yUe3KghyQ9yheNwLnjmzh/7+gfDBmHCQ==
+
+acorn@^7.1.1:
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
+  integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
 ajv@^6.12.3:
   version "6.12.6"

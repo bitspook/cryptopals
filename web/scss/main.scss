@@ -3,7 +3,7 @@
 @import '../../node_modules/sakura.css/scss/main';
 
 * {
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 html {
@@ -11,7 +11,7 @@ html {
 }
 
 body {
-  max-width: 1400px;
+  max-width: 980px;
   font-size: 1.4rem;
 }
 
@@ -31,15 +31,14 @@ h1, h2, h3, h4, h5, h6 {
 h2, h3, h4, h5, h6 {
   font-style: italic;
   font-weight: 400;
-  margin-top: 4.1rem;
-  margin-bottom: 0;
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
   font-size: 2.2rem;
   line-height: 1;
 }
 
 h3 {
   font-size: 1.8rem;
-  margin-top: 2rem;
 }
 
 h4, h5, h6 {
@@ -92,4 +91,47 @@ p, ol, ul {
 
 .collapsed {
   display: none;
+}
+
+#table-of-contents {
+  position: absolute;
+  right: 4em;
+  width: 320px;
+
+  h2 {
+    display: none;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+  }
+
+  li {
+    font-size: 1.2rem;
+    line-height: 1;
+    margin: 0.6rem 0;
+  }
+
+  @media (max-width: 1430px) {
+    position: relative;
+    right: unset;
+
+    h2 {
+      display: block;
+    }
+  }
+
+  @media (min-width: 1430px) and (max-width: 1550px) {
+    right: 0;
+    width: 280px;
+
+    li {
+      font-size: 1rem;
+    }
+  }
+
+  @media (min-width: 1550px) and (max-width: 1740px) {
+    right: 0;
+  }
 }

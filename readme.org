@@ -1,9 +1,9 @@
 #+title: Cryptopals
 #+author: Charanjit Singh
-#+STARTUP: hideblocks
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="scss/main.scss"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="scss/main.scss" />
 #+HTML_HEAD: <script type="module" src="./index.tsx"></script>
 #+OPTIONS: html-style:nil num:nil creator:comment
+#+STARTUP: hideblocks
 
 This page is me solving [[https://cryptopals.com/sets/1/challenges/6][cryptopals challenges]] with Rust, and taking
 notes. UI widgets accompanying the rust snippets are running the wasm
@@ -16,52 +16,41 @@ anything; be vigilant about mistakes and misstatements.
 #+end_quote
 
 * Set 1
- 
+
 ** Challenge 1: Convert Hex to Base64
 :PROPERTIES:
 :header-args: :tangle src/set1/challenge1.rs :comments link
 :END:
+
+#+attr_obcell: :module c1
+#+BEGIN_SRC js
+c1_cipher = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+#+END_SRC
 
 First challenge is straightforward enough, we are given a HEX encoded
 string, and we have to encode it to base64 instead. I decided to not
 go down the rabbit hole here and use the libraries which handle
 encoding/decoding to/from hex/base64.
 
-#+begin_src rust :exports none
-  use anyhow::{Result, Error};
+#+BEGIN_SRC rust
+pub fn hex_to_b64(input: &str) -> Result<String> {
+    let hex_str = hex::decode(input).map_err(Error::from)?;
+    let out = base64::encode(hex_str);
 
-  use wasm_bindgen::prelude::*;
-#+end_src
-
-#+begin_src rust
-  pub fn hex_to_b64(input: &str) -> Result<String> {
-      let hex_str = hex::decode(input).map_err(Error::from)?;
-      let out = base64::encode(hex_str);
-
-      Ok(out)
-  }
-#+end_src
+    Ok(out)
+}
+#+END_SRC
 
 I am using [[https://github.com/dtolnay/anyhow][anyhow]] library to return =anyhow::Result= here; because it
 is convenient. I also use it in my (relatively) bigger rust
 applications.
 
-#+begin_src rust :exports none
-  #[wasm_bindgen]
-  pub fn hex_to_b64_web(input: &str) -> String {
-      hex_to_b64(input).unwrap()
-  }
-#+end_src
+This solves the challenge without fuss.
 
-You can play around with the result of above code.
-
-#+begin_export html
-<play-function
-  fn="cryptopals.hex_to_b64_web"
-  display-name="hex_to_b64"
-  error-message="Input is not a valid HEX encoded string"
-></play-function>
-#+end_export
+#+attr_obcell: :module c1
+#+BEGIN_SRC js
+cryptopals.hex_to_b64_web(c1_cipher)
+#+END_SRC
 
 Entering the test string given in the [[https://cryptopals.com/sets/1/challenges/1][challenge]] produce the expected
 output.
@@ -71,20 +60,20 @@ about rust is how easy it makes to write tests. We can drop the
 following snippet in the same file and =cargo test= will run it. The
 lack of friction makes for a great developer experience.
 
-#+begin_src rust
-  #[cfg(test)]
-  mod tests {
-      use super::*;
+#+BEGIN_SRC rust
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-      #[test]
-      fn s1e1_hex_to_b64() {
-          let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-          let output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
+    #[test]
+    fn s1e1_hex_to_b64() {
+        let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+        let output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
 
-          assert_eq!(hex_to_b64(input).unwrap(), output);
-      }
-  }
-#+end_src
+        assert_eq!(hex_to_b64(input).unwrap(), output);
+    }
+}
+#+END_SRC
 
 ** Challenge 2: Fixed XOR
 :PROPERTIES:
@@ -98,36 +87,32 @@ exactly that.
 
 But, this time let's tart with writing tests first.
 
-#+begin_src rust :exports none
-  use wasm_bindgen::prelude::*;
-#+end_src
+#+BEGIN_SRC rust
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#+begin_src rust
-  #[cfg(test)]
-  mod tests {
-      use super::*;
+    #[test]
+    fn test_xor() {
+        let b1 = hex::decode("1c0111001f010100061a024b53535009181c").unwrap();
+        let b2 = hex::decode("686974207468652062756c6c277320657965").unwrap();
+        let expected = "746865206b696420646f6e277420706c6179";
 
-      #[test]
-      fn test_xor() {
-          let b1 = hex::decode("1c0111001f010100061a024b53535009181c").unwrap();
-          let b2 = hex::decode("686974207468652062756c6c277320657965").unwrap();
-          let expected = "746865206b696420646f6e277420706c6179";
+        assert_eq!(xor(&b1, &b2), hex::decode(expected).unwrap());
+    }
 
-          assert_eq!(xor(&b1, &b2), hex::decode(expected).unwrap());
-      }
-
-      #[test]
-      fn test_hexor() {
-          assert_eq!(
-              hexor(
-                  "1c0111001f010100061a024b53535009181c",
-                  "686974207468652062756c6c277320657965"
-              ),
-              "746865206b696420646f6e277420706c6179"
-          )
-      }
-  }
-#+end_src
+    #[test]
+    fn test_hexor() {
+        assert_eq!(
+            hexor(
+                "1c0111001f010100061a024b53535009181c",
+                "686974207468652062756c6c277320657965"
+            ),
+            "746865206b696420646f6e277420706c6179"
+        )
+    }
+}
+#+END_SRC
 
 We are given two hex encoded strings, which we'll first decode. In the
 first challenge, it was recommended that we should work directly with
@@ -142,25 +127,25 @@ already), so we'll also create a helper which can work directly with
 strings. We'll call it =hexor= to put emphasis on the fact that its
 input strings are hex encoded.
 
-#+begin_src rust
-  pub fn xor(b1: &[u8], b2: &[u8]) -> Vec<u8> {
-      let mut result: Vec<u8> = vec![];
+#+BEGIN_SRC rust
+pub fn xor(b1: &[u8], b2: &[u8]) -> Vec<u8> {
+    let mut result: Vec<u8> = vec![];
 
-      for i in 0..b1.len() {
-          result.push(b1[i] ^ b2[i]);
-      }
+    for i in 0..b1.len() {
+        result.push(b1[i] ^ b2[i]);
+    }
 
-      result
-  }
+    result
+}
 
-  #[wasm_bindgen]
-  pub fn hexor(s1: &str, s2: &str) -> String {
-      let b1 = hex::decode(s1).unwrap();
-      let b2 = hex::decode(s2).unwrap();
+#[wasm_bindgen]
+pub fn hexor(s1: &str, s2: &str) -> String {
+    let b1 = hex::decode(s1).unwrap();
+    let b2 = hex::decode(s2).unwrap();
 
-      hex::encode(xor(&b1, &b2))
-  }
-#+end_src
+    hex::encode(xor(&b1, &b2))
+}
+#+END_SRC
 
 #+begin_export html
 <play-function
@@ -210,28 +195,20 @@ equal length.
 Let's write a function which takes a byte-array and repeat it to given
 length.
 
-#+begin_src rust :exports none
-  use std::collections::HashMap;
-  use serde::{Deserialize, Serialize};
-  use wasm_bindgen::prelude::*;
+#+BEGIN_SRC rust
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-  use super::challenge2::xor;
-#+end_src
+    #[test]
+    fn test_repeat_till() {
+        let input = "key".as_bytes();
+        let expected = "keykeykeykeykeyke".as_bytes();
 
-#+begin_src rust
-  #[cfg(test)]
-  mod tests {
-      use super::*;
-
-      #[test]
-      fn test_repeat_till() {
-          let input = "key".as_bytes();
-          let expected = "keykeykeykeykeyke".as_bytes();
-
-          assert_eq!(repeat_till(input, 17), expected);
-      }
-  }
-#+end_src
+        assert_eq!(repeat_till(input, 17), expected);
+    }
+}
+#+END_SRC
 
 Try and see if you can make this test pass.
 
@@ -240,17 +217,17 @@ Try and see if you can make this test pass.
 #+end_export
 
 #+ATTR_HTML: :class repeat-till
-#+begin_src rust
-  pub fn repeat_till(input: &[u8], length: usize) -> Vec<u8> {
-      let mut result = vec![];
+#+BEGIN_SRC rust
+pub fn repeat_till(input: &[u8], length: usize) -> Vec<u8> {
+    let mut result = vec![];
 
-      for i in 0..length {
-          result.push(input[i % input.len()]);
-      }
+    for i in 0..length {
+        result.push(input[i % input.len()]);
+    }
 
-      result
-  }
-#+end_src
+    result
+}
+#+END_SRC
 
 We can now combine these two functions to try brute-force decrypting
 the given cipher.
@@ -261,18 +238,18 @@ do so right in the browser.</div>
 #+end_export
 
 #+ATTR_HTML: :class fixed-key-xor
-#+begin_src rust
-  #[wasm_bindgen]
-  pub fn fixed_key_xor(hexedCipher: &str, key: u8) -> String {
-      let cipher = hex::decode(hexedCipher).unwrap();
-      let repeated_key = repeat_till(&[key], cipher.len());
-      let result = xor(&cipher, &repeated_key);
+#+BEGIN_SRC rust
+#[wasm_bindgen]
+pub fn fixed_key_xor(hexedCipher: &str, key: u8) -> String {
+    let cipher = hex::decode(hexedCipher).unwrap();
+    let repeated_key = repeat_till(&[key], cipher.len());
+    let result = xor(&cipher, &repeated_key);
 
-      std::str::from_utf8(&result)
-          .expect("Invalid utf8 chars in string")
-          .to_string()
-  }
-#+end_src
+    std::str::from_utf8(&result)
+        .expect("Invalid utf8 chars in string")
+        .to_string()
+}
+#+END_SRC
 
 #+begin_export html
 <play-function
@@ -313,44 +290,44 @@ frequency matches [[https://en.wikipedia.org/wiki/Letter_frequency][that of norm
 First let's write a function to determine letter-frequency of a given
 string. We'll start by writing a test:
 
-#+begin_src rust
-  #[cfg(test)]
-  mod lf_tests {
-      use super::*;
+#+BEGIN_SRC rust
+#[cfg(test)]
+mod lf_tests {
+    use super::*;
 
-      #[test]
-      fn test_letter_frequency() {
-          let input = "aaaaccddee";
-          let lf = letter_frequency(input);
+    #[test]
+    fn test_letter_frequency() {
+        let input = "aaaaccddee";
+        let lf = letter_frequency(input);
 
-          assert_eq!(lf.get(&'a'), Some(&0.4));
-          assert_eq!(lf.get(&'c'), Some(&0.2));
-          assert_eq!(lf.get(&'d'), Some(&0.2));
-          assert_eq!(lf.get(&'e'), Some(&0.2));
-      }
-  }
-#+end_src
+        assert_eq!(lf.get(&'a'), Some(&0.4));
+        assert_eq!(lf.get(&'c'), Some(&0.2));
+        assert_eq!(lf.get(&'d'), Some(&0.2));
+        assert_eq!(lf.get(&'e'), Some(&0.2));
+    }
+}
+#+END_SRC
 
 #+begin_export html
 <div class="reveal" data-reveal="letter-frequency">And then make it pass.</div>
 #+end_export
 
 #+ATTR_HTML: :class letter-frequency
-#+begin_src rust
-  pub fn letter_frequency(input: &str) -> HashMap<char, f64> {
-      let mut lf = HashMap::new();
+#+BEGIN_SRC rust
+pub fn letter_frequency(input: &str) -> HashMap<char, f64> {
+    let mut lf = HashMap::new();
 
-      for c in input.chars() {
-          *lf.entry(c.to_ascii_lowercase()).or_default() += 1.0;
-      }
+    for c in input.chars() {
+        ,*lf.entry(c.to_ascii_lowercase()).or_default() += 1.0;
+    }
 
-      for v in lf.values_mut() {
-          *v /= input.len() as f64;
-      }
+    for v in lf.values_mut() {
+        ,*v /= input.len() as f64;
+    }
 
-      lf
-  }
-#+end_src
+    lf
+}
+#+END_SRC
 
 We want to reach a score of some kind, which can allow us to compare
 decryption results of two attempts. Let's go for [[https://en.wikipedia.org/wiki/Mean_squared_error][Mean Squared Error]]. I
@@ -362,102 +339,102 @@ We'll start with writing tests. We'll call our function
 the letter frequency of the given string is when compared with the
 [[https://en.wikipedia.org/wiki/Letter_frequency][standard]].
 
-#+begin_src rust
-  #[cfg(test)]
-  mod lfe_tests {
-      use super::letter_frequency_error;
+#+BEGIN_SRC rust
+#[cfg(test)]
+mod lfe_tests {
+    use super::letter_frequency_error;
 
-      #[test]
-      fn test_letter_frequency_error() {
-          let input = "She sells sea shells at the sea shore. Shells are blue and they are white, ocean is blue and it is bright.";
-          let error_till_2dec = (letter_frequency_error(input) * 100.0).trunc() / 100.0;
+    #[test]
+    fn test_letter_frequency_error() {
+        let input = "She sells sea shells at the sea shore. Shells are blue and they are white, ocean is blue and it is bright.";
+        let error_till_2dec = (letter_frequency_error(input) * 100.0).trunc() / 100.0;
 
-          assert_eq!(error_till_2dec, 0.26);
-      }
-  }
-#+end_src
+        assert_eq!(error_till_2dec, 0.26);
+    }
+}
+#+END_SRC
 
 #+begin_export html
 <div class="reveal" data-reveal="letter-frequency-error">Reveal Solution</div>
 #+end_export
 
 #+ATTR_HTML: :class letter-frequency-error
-#+begin_src rust
-  #[wasm_bindgen]
-  pub fn letter_frequency_error(input: &str) -> f64 {
-      let standard_freq = HashMap::from([
-          ('a', 0.08167),
-          ('b', 0.01492),
-          ('c', 0.20782),
-          ('d', 0.04253),
-          ('e', 0.12702),
-          ('f', 0.02228),
-          ('g', 0.02015),
-          ('h', 0.06094),
-          ('i', 0.06966),
-          ('j', 0.00153),
-          ('k', 0.00772),
-          ('l', 0.04025),
-          ('m', 0.02406),
-          ('n', 0.06749),
-          ('o', 0.07507),
-          ('p', 0.01929),
-          ('q', 0.00095),
-          ('r', 0.05987),
-          ('s', 0.06327),
-          ('t', 0.09056),
-          ('u', 0.02758),
-          ('v', 0.00978),
-          ('w', 0.02360),
-          ('x', 0.00150),
-          ('y', 0.01974),
-          ('z', 0.00074),
-      ]);
-      let letter_freq = letter_frequency(input);
-      let mut freq_sum: f64 = 0.0;
+#+BEGIN_SRC rust
+#[wasm_bindgen]
+pub fn letter_frequency_error(input: &str) -> f64 {
+    let standard_freq = HashMap::from([
+        ('a', 0.08167),
+        ('b', 0.01492),
+        ('c', 0.20782),
+        ('d', 0.04253),
+        ('e', 0.12702),
+        ('f', 0.02228),
+        ('g', 0.02015),
+        ('h', 0.06094),
+        ('i', 0.06966),
+        ('j', 0.00153),
+        ('k', 0.00772),
+        ('l', 0.04025),
+        ('m', 0.02406),
+        ('n', 0.06749),
+        ('o', 0.07507),
+        ('p', 0.01929),
+        ('q', 0.00095),
+        ('r', 0.05987),
+        ('s', 0.06327),
+        ('t', 0.09056),
+        ('u', 0.02758),
+        ('v', 0.00978),
+        ('w', 0.02360),
+        ('x', 0.00150),
+        ('y', 0.01974),
+        ('z', 0.00074),
+    ]);
+    let letter_freq = letter_frequency(input);
+    let mut freq_sum: f64 = 0.0;
 
-      for (letter, s_freq) in &standard_freq {
-          let freq = letter_freq.get(letter).unwrap_or(&0.0);
-          let freq_diff = *freq - *s_freq;
-          freq_sum += freq_diff * freq_diff;
-      }
+    for (letter, s_freq) in &standard_freq {
+        let freq = letter_freq.get(letter).unwrap_or(&0.0);
+        let freq_diff = *freq - *s_freq;
+        freq_sum += freq_diff * freq_diff;
+    }
 
-      (freq_sum / letter_freq.len() as f64) * 100.0
-  }
-#+end_src
+    (freq_sum / letter_freq.len() as f64) * 100.0
+}
+#+END_SRC
 
 Looks like we have all the pieces. Time to connect them and see if our
 approach produces any good results.
 
-#+begin_src rust
-  #[derive(Serialize, Deserialize)]
-  pub struct Crack {
-      key: String,
-      plain_text: String,
-  }
+#+BEGIN_SRC rust
+#[derive(Serialize, Deserialize)]
+pub struct Crack {
+    key: String,
+    plain_text: String,
+}
 
-  pub fn crack_single_key_xor_cipher(hexedCipher: &str) -> Crack {
-      let mut solution: (u8, String, f64) = (0, "".to_string(), 99.0);
-      for key in 1..255 {
-          let cipher = hex::decode(hexedCipher).unwrap();
-          let repeated_key = repeat_till(&[key], cipher.len());
-          let result = xor(&cipher, &repeated_key);
+pub fn crack_single_key_xor_cipher(hexedCipher: &str) -> Crack {
+    let mut solution: (u8, String, f64) = (0, "".to_string(), 99.0);
+    for key in 1..255 {
+        let cipher = hex::decode(hexedCipher).unwrap();
+        let repeated_key = repeat_till(&[key], cipher.len());
+        let result = xor(&cipher, &repeated_key);
 
-          if let Ok(result) = std::str::from_utf8(&result) {
-              let lfe = letter_frequency_error(result);
+        if let Ok(result) = std::str::from_utf8(&result) {
+            let lfe = letter_frequency_error(result);
 
-              if lfe < solution.2 {
-                  solution = (key, result.to_string(), lfe);
-              }
-          }
-      }
+            if lfe < solution.2 {
+                solution = (key, result.to_string(), lfe);
+            }
+        }
+    }
 
-      Crack {
-          key: solution.0.to_string(),
-          plain_text: solution.1,
-      }
-  }
-#+end_src
+    Crack {
+        key: solution.0.to_string(),
+        plain_text: solution.1,
+    }
+}
+#+END_SRC
 
 To make things a bit more readable, and for feel-good reasons, we've
 created a =Struct= to hold our possible solution. Our approach is
@@ -477,20 +454,12 @@ crack the cipher given in cryptopals challenge.
 #+end_export
 
 #+ATTR_HTML: :class crack-single-key-xor-cipher-glue
-#+begin_src rust
-  #[wasm_bindgen]
-  pub fn crack_single_key_xor_cipher_web(hexedCipher: &str) -> JsValue {
-      JsValue::from_serde(&crack_single_key_xor_cipher(hexedCipher)).unwrap()
-  }
-#+end_src
-
-#+begin_src rust :exports none
-  fn has_valid_ascii_chars(sentence: &str) -> bool {
-      sentence
-          .chars()
-          .all(|c| c.is_ascii_alphanumeric() || c.is_ascii_punctuation() || c.is_whitespace())
-  }
-#+end_src
+#+BEGIN_SRC rust
+#[wasm_bindgen]
+pub fn crack_single_key_xor_cipher_web(hexedCipher: &str) -> JsValue {
+    JsValue::from_serde(&crack_single_key_xor_cipher(hexedCipher)).unwrap()
+}
+#+END_SRC
 
 # Local Variables:
 # org-html-htmlize-font-prefix: "hljs-"
