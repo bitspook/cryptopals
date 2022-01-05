@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-01-04 Tue 22:47 -->
+<!-- 2022-01-05 Wed 09:25 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cryptopals</title>
@@ -50,10 +50,10 @@ anything; be vigilant about mistakes and misstatements.
 <div id="outline-container-org88f8901" class="outline-3">
 <h3 id="org88f8901">Challenge 1: Convert Hex to Base64</h3>
 <div class="outline-text-3" id="text-org88f8901">
-<div class="ob-cell"data-module="c1" id="ob-cellvWD2vy" ><div data-="nil" ><div class="org-src-container">
+<div class="ob-cell"data-module="c1" id="ob-cellUfuBAM" ><div class="org-src-container">
 <pre class="src src-js">c1_cipher = <span class="hljs-string">"49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"</span>;
 </pre>
-</div></div></div>
+</div></div>
 
 <p>
 First challenge is straightforward enough, we are given a HEX encoded
@@ -62,7 +62,7 @@ go down the rabbit hole here and use the libraries which handle
 encoding/decoding to/from hex/base64.
 </p>
 
-<div data-="nil" ><div class="org-src-container">
+<div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">hex_to_b64</span>(<span class="hljs-variable-name">input</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">Result</span>&lt;<span class="hljs-type">String</span>&gt; {
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">hex_str</span> = <span class="hljs-constant">hex</span>::decode(input).map_err(<span class="hljs-type">Error</span>::from)<span class="hljs-rust-question-mark">?</span>;
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">out</span> = <span class="hljs-constant">base64</span>::encode(hex_str);
@@ -70,7 +70,7 @@ encoding/decoding to/from hex/base64.
     <span class="hljs-type">Ok</span>(out)
 }
 </pre>
-</div></div>
+</div>
 
 <p>
 I am using <a href="https://github.com/dtolnay/anyhow">anyhow</a> library to return <code>anyhow::Result</code> here; because it
@@ -82,10 +82,10 @@ applications.
 This solves the challenge without fuss.
 </p>
 
-<div class="ob-cell"data-module="c1" id="ob-cellIZ5J4N" ><div data-="nil" ><div class="org-src-container">
+<div class="ob-cell"data-module="c1" id="ob-cellcRwj9f" ><div class="org-src-container">
 <pre class="src src-js">cryptopals.hex_to_b64_web(c1_cipher)
 </pre>
-</div></div></div>
+</div></div>
 
 <p>
 Entering the test string given in the <a href="https://cryptopals.com/sets/1/challenges/1">challenge</a> produce the expected
@@ -99,7 +99,7 @@ following snippet in the same file and <code>cargo test</code> will run it. The
 lack of friction makes for a great developer experience.
 </p>
 
-<div data-="nil" ><div class="org-src-container">
+<div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-preprocessor">#[cfg(test)]</span>
 <span class="hljs-keyword">mod</span> <span class="hljs-constant">tests</span> {
     <span class="hljs-keyword">use</span> <span class="hljs-keyword">super</span>::*;
@@ -113,7 +113,7 @@ lack of friction makes for a great developer experience.
     }
 }
 </pre>
-</div></div>
+</div>
 </div>
 </div>
 
@@ -131,7 +131,7 @@ exactly that.
 But, this time let's tart with writing tests first.
 </p>
 
-<div data-="nil" ><div class="org-src-container">
+<div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-preprocessor">#[cfg(test)]</span>
 <span class="hljs-keyword">mod</span> <span class="hljs-constant">tests</span> {
     <span class="hljs-keyword">use</span> <span class="hljs-keyword">super</span>::*;
@@ -157,7 +157,7 @@ But, this time let's tart with writing tests first.
     }
 }
 </pre>
-</div></div>
+</div>
 
 <p>
 We are given two hex encoded strings, which we'll first decode. In the
@@ -176,7 +176,7 @@ strings. We'll call it <code>hexor</code> to put emphasis on the fact that its
 input strings are hex encoded.
 </p>
 
-<div data-="nil" ><div class="org-src-container">
+<div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">xor</span>(<span class="hljs-variable-name">b1</span>: &amp;[<span class="hljs-type">u8</span>], <span class="hljs-variable-name">b2</span>: &amp;[<span class="hljs-type">u8</span>]) -&gt; <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt; {
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> <span class="hljs-variable-name">result</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt; = <span class="hljs-preprocessor">vec!</span>[];
 
@@ -195,7 +195,7 @@ input strings are hex encoded.
     <span class="hljs-constant">hex</span>::encode(xor(<span class="hljs-rust-ampersand">&amp;</span>b1, <span class="hljs-rust-ampersand">&amp;</span>b2))
 }
 </pre>
-</div></div>
+</div>
 
 <play-function
   fn="cryptopals.hexor"
@@ -255,7 +255,7 @@ Let's write a function which takes a byte-array and repeat it to given
 length.
 </p>
 
-<div data-="nil" ><div class="org-src-container">
+<div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-preprocessor">#[cfg(test)]</span>
 <span class="hljs-keyword">mod</span> <span class="hljs-constant">tests</span> {
     <span class="hljs-keyword">use</span> <span class="hljs-keyword">super</span>::*;
@@ -269,7 +269,7 @@ length.
     }
 }
 </pre>
-</div></div>
+</div>
 
 <p>
 Try and see if you can make this test pass.
@@ -277,7 +277,7 @@ Try and see if you can make this test pass.
 
 <div class="reveal" data-reveal="repeat-till">Reveal Solution</div>
 
-<div class="repeat-till" data-="nil" ><div class="org-src-container">
+<div class="repeat-till" ><div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">repeat_till</span>(<span class="hljs-variable-name">input</span>: &amp;[<span class="hljs-type">u8</span>], <span class="hljs-variable-name">length</span>: <span class="hljs-type">usize</span>) -&gt; <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt; {
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> <span class="hljs-variable-name">result</span> = <span class="hljs-preprocessor">vec!</span>[];
 
@@ -298,7 +298,7 @@ the given cipher.
 <div class="reveal" data-reveal="fixed-key-xor">Let's quickly write some glue code to
 do so right in the browser.</div>
 
-<div class="fixed-key-xor" data-="nil" ><div class="org-src-container">
+<div class="fixed-key-xor" ><div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-preprocessor">#[wasm_bindgen]</span>
 <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">fixed_key_xor</span>(<span class="hljs-variable-name">hexedCipher</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>, <span class="hljs-variable-name">key</span>: <span class="hljs-type">u8</span>) -&gt; <span class="hljs-type">String</span> {
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">cipher</span> = <span class="hljs-constant">hex</span>::decode(hexedCipher).unwrap();
@@ -361,7 +361,7 @@ First let's write a function to determine letter-frequency of a given
 string. We'll start by writing a test:
 </p>
 
-<div data-="nil" ><div class="org-src-container">
+<div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-preprocessor">#[cfg(test)]</span>
 <span class="hljs-keyword">mod</span> <span class="hljs-constant">lf_tests</span> {
     <span class="hljs-keyword">use</span> <span class="hljs-keyword">super</span>::*;
@@ -378,11 +378,11 @@ string. We'll start by writing a test:
     }
 }
 </pre>
-</div></div>
+</div>
 
 <div class="reveal" data-reveal="letter-frequency">And then make it pass.</div>
 
-<div class="letter-frequency" data-="nil" ><div class="org-src-container">
+<div class="letter-frequency" ><div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">letter_frequency</span>(<span class="hljs-variable-name">input</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">HashMap</span>&lt;<span class="hljs-type">char</span>, <span class="hljs-type">f64</span>&gt; {
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> <span class="hljs-variable-name">lf</span> = <span class="hljs-type">HashMap</span>::new();
 
@@ -413,7 +413,7 @@ the letter frequency of the given string is when compared with the
 <a href="https://en.wikipedia.org/wiki/Letter_frequency">standard</a>.
 </p>
 
-<div data-="nil" ><div class="org-src-container">
+<div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-preprocessor">#[cfg(test)]</span>
 <span class="hljs-keyword">mod</span> <span class="hljs-constant">lfe_tests</span> {
     <span class="hljs-keyword">use</span> <span class="hljs-keyword">super</span>::letter_frequency_error;
@@ -427,11 +427,11 @@ the letter frequency of the given string is when compared with the
     }
 }
 </pre>
-</div></div>
+</div>
 
 <div class="reveal" data-reveal="letter-frequency-error">Reveal Solution</div>
 
-<div class="letter-frequency-error" data-="nil" ><div class="org-src-container">
+<div class="letter-frequency-error" ><div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-preprocessor">#[wasm_bindgen]</span>
 <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">letter_frequency_error</span>(<span class="hljs-variable-name">input</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">f64</span> {
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">standard_freq</span> = <span class="hljs-type">HashMap</span>::from([
@@ -481,7 +481,7 @@ Looks like we have all the pieces. Time to connect them and see if our
 approach produces any good results.
 </p>
 
-<div data-="nil" ><div class="org-src-container">
+<div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-preprocessor">#[derive(Serialize, Deserialize)]</span>
 <span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-type">Crack</span> {
     <span class="hljs-variable-name">key</span>: <span class="hljs-type">String</span>,
@@ -510,7 +510,7 @@ approach produces any good results.
     }
 }
 </pre>
-</div></div>
+</div>
 
 <p>
 To make things a bit more readable, and for feel-good reasons, we've
@@ -535,7 +535,7 @@ crack the cipher given in cryptopals challenge.
 
 <div class="reveal" data-reveal="crack-single-key-xor-cipher-glue">Some glue code for web.</div>
 
-<div class="crack-single-key-xor-cipher-glue" data-="nil" ><div class="org-src-container">
+<div class="crack-single-key-xor-cipher-glue" ><div class="org-src-container">
 <pre class="src src-rust"><span class="hljs-preprocessor">#[wasm_bindgen]</span>
 <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">crack_single_key_xor_cipher_web</span>(<span class="hljs-variable-name">hexedCipher</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">JsValue</span> {
     <span class="hljs-type">JsValue</span>::from_serde(<span class="hljs-rust-ampersand">&amp;</span>crack_single_key_xor_cipher(hexedCipher)).unwrap()
@@ -548,7 +548,7 @@ crack the cipher given in cryptopals challenge.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Charanjit Singh</p>
-<p class="date">Created: 2022-01-04 Tue 22:47</p>
+<p class="date">Created: 2022-01-05 Wed 09:25</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.0.50 (<a href="https://orgmode.org">Org</a> mode 9.5.2)</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

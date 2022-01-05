@@ -1,7 +1,36 @@
 @import "~/web/scss/variables";
 
+$gutter-width: 20px;
+
 .container {
   margin: 2rem 0;
   background-color: $color-bg-code-blocks;
+  display: flex;
 }
 
+
+.content {
+  width: calc(100% - $gutter-width);
+
+  :global {
+    .src {
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .observablehq--inspect {
+      overflow: visible;
+    }
+  }
+}
+
+.gutter {
+  min-width: $gutter-width;
+  background: #eee;
+}
+
+.outputContainer {
+  padding: 1rem;
+  font-size: 1rem;
+  overflow: auto;
+}

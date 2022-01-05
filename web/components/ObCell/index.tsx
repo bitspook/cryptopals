@@ -15,8 +15,21 @@ interface ObCellProps {
 const ObCell =
   ({ module }) =>
   (p: ObCellProps) => {
+    const codeEl = useRef(null);
     const outputEl = useRef(null);
-    const code = document.querySelector(p.selector).textContent;
+    const cellNode = document.querySelector(p.selector);
+
+    if (!cellNode) {
+      console.error(
+        "Unable to find cell-node for OBCell. [selector=",
+        p.selector,
+        "]"
+      );
+      return null;
+    }
+
+    const codeNode = cellNode.firstChild;
+    const code = codeNode.textContent;
 
     useEffect(() => {
       if (!outputEl.current) return;
@@ -28,9 +41,23 @@ const ObCell =
       interpreter.module(code);
     }, [outputEl]);
 
+    // Move the code element added by org-mode into our component for
+    // easier manipulation
+    useEffect(() => {
+      if (!codeEl.current || codeEl.current === codeNode) return;
+      codeNode.remove();
+
+      codeEl.current.replaceWith(codeNode);
+      codeEl.current = codeNode;
+    }, [codeEl]);
+
     return (
       <div className={s.container}>
-        <div ref={outputEl}></div>
+        <div className={s.gutter}></div>
+        <div className={s.content}>
+          <div className={s.outputContainer} ref={outputEl}></div>
+          <div ref={codeEl}></div>
+        </div>
       </div>
     );
   };
