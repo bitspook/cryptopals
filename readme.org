@@ -22,8 +22,14 @@ anything; be vigilant about mistakes and misstatements.
 :header-args: :tangle src/set1/challenge1.rs :comments link
 :END:
 
+#+begin_src rust :exports none
+  use anyhow::{Result, Error};
+
+  use wasm_bindgen::prelude::*;
+#+end_src
+
 #+attr_obcell: :module c1
-#+BEGIN_SRC js
+#+BEGIN_SRC js :tangle nil
 c1_cipher = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
 #+END_SRC
 
@@ -47,8 +53,21 @@ applications.
 
 This solves the challenge without fuss.
 
+#+begin_export html
+<div class="reveal" data-reveal="hex-to-b64-glue">Some glue code for browser.</div>
+#+end_export
+
+#+attr_html: :class hex-to-b64-glue
+#+begin_src rust
+  #[wasm_bindgen]
+  pub fn hex_to_b64_web(input: &str) -> String {
+      hex_to_b64(input).unwrap()
+  }
+#+end_src
+
+
 #+attr_obcell: :module c1
-#+BEGIN_SRC js
+#+BEGIN_SRC js :tangle nil
 cryptopals.hex_to_b64_web(c1_cipher)
 #+END_SRC
 
@@ -86,6 +105,10 @@ operation on them. We can simply use rust's =^= operator, which does
 exactly that.
 
 But, this time let's tart with writing tests first.
+
+#+begin_src rust :exports none
+  use wasm_bindgen::prelude::*;
+#+end_src
 
 #+BEGIN_SRC rust
 #[cfg(test)]

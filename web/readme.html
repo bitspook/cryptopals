@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-01-05 Wed 09:25 -->
+<!-- 2022-01-05 Wed 12:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cryptopals</title>
@@ -50,7 +50,7 @@ anything; be vigilant about mistakes and misstatements.
 <div id="outline-container-org88f8901" class="outline-3">
 <h3 id="org88f8901">Challenge 1: Convert Hex to Base64</h3>
 <div class="outline-text-3" id="text-org88f8901">
-<div class="ob-cell"data-module="c1" id="ob-cellUfuBAM" ><div class="org-src-container">
+<div class="ob-cell"data-module="c1" id="ob-cellDTxfbQ" ><div class="org-src-container">
 <pre class="src src-js">c1_cipher = <span class="hljs-string">"49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"</span>;
 </pre>
 </div></div>
@@ -82,7 +82,18 @@ applications.
 This solves the challenge without fuss.
 </p>
 
-<div class="ob-cell"data-module="c1" id="ob-cellcRwj9f" ><div class="org-src-container">
+<div class="reveal" data-reveal="hex-to-b64-glue">Some glue code for browser.</div>
+
+<div class="hex-to-b64-glue" ><div class="org-src-container">
+<pre class="src src-rust"><span class="hljs-preprocessor">#[wasm_bindgen]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">hex_to_b64_web</span>(<span class="hljs-variable-name">input</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>) -&gt; <span class="hljs-type">String</span> {
+    hex_to_b64(input).unwrap()
+}
+</pre>
+</div></div>
+
+
+<div class="ob-cell"data-module="c1" id="ob-celluToHB5" ><div class="org-src-container">
 <pre class="src src-js">cryptopals.hex_to_b64_web(c1_cipher)
 </pre>
 </div></div>
@@ -548,7 +559,7 @@ crack the cipher given in cryptopals challenge.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Charanjit Singh</p>
-<p class="date">Created: 2022-01-05 Wed 09:25</p>
+<p class="date">Created: 2022-01-05 Wed 12:30</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.0.50 (<a href="https://orgmode.org">Org</a> mode 9.5.2)</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

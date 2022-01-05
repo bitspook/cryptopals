@@ -4,23 +4,23 @@ use anyhow::{Result, Error};
 use wasm_bindgen::prelude::*;
 // Challenge 1: Convert Hex to Base64:1 ends here
 
-// [[file:../../readme.org::*Challenge 1: Convert Hex to Base64][Challenge 1: Convert Hex to Base64:2]]
+// [[file:../../readme.org::*Challenge 1: Convert Hex to Base64][Challenge 1: Convert Hex to Base64:3]]
 pub fn hex_to_b64(input: &str) -> Result<String> {
     let hex_str = hex::decode(input).map_err(Error::from)?;
     let out = base64::encode(hex_str);
 
     Ok(out)
 }
-// Challenge 1: Convert Hex to Base64:2 ends here
+// Challenge 1: Convert Hex to Base64:3 ends here
 
-// [[file:../../readme.org::*Challenge 1: Convert Hex to Base64][Challenge 1: Convert Hex to Base64:3]]
+// [[file:../../readme.org::*Challenge 1: Convert Hex to Base64][Challenge 1: Convert Hex to Base64:4]]
 #[wasm_bindgen]
 pub fn hex_to_b64_web(input: &str) -> String {
     hex_to_b64(input).unwrap()
 }
-// Challenge 1: Convert Hex to Base64:3 ends here
+// Challenge 1: Convert Hex to Base64:4 ends here
 
-// [[file:../../readme.org::*Challenge 1: Convert Hex to Base64][Challenge 1: Convert Hex to Base64:4]]
+// [[file:../../readme.org::*Challenge 1: Convert Hex to Base64][Challenge 1: Convert Hex to Base64:6]]
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -33,4 +33,4 @@ mod tests {
         assert_eq!(hex_to_b64(input).unwrap(), output);
     }
 }
-// Challenge 1: Convert Hex to Base64:4 ends here
+// Challenge 1: Convert Hex to Base64:6 ends here
