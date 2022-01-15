@@ -20,6 +20,7 @@ anything; be vigilant about mistakes and misstatements.
 ** Challenge 1: Convert Hex to Base64
 :PROPERTIES:
 :header-args: :tangle src/set1/challenge1.rs :comments link
+:ID:       92fceb57-a247-4011-a440-088db62ac4ee
 :END:
 
 #+begin_src rust :exports none
@@ -28,15 +29,16 @@ anything; be vigilant about mistakes and misstatements.
   use wasm_bindgen::prelude::*;
 #+end_src
 
+First challenge is straightforward enough, we are given a HEX encoded
+string, and we have to encode it to base64 instead.
+
 #+attr_obcell: :module c1
 #+BEGIN_SRC js :tangle nil
 c1_cipher = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
 #+END_SRC
 
-First challenge is straightforward enough, we are given a HEX encoded
-string, and we have to encode it to base64 instead. I decided to not
-go down the rabbit hole here and use the libraries which handle
-encoding/decoding to/from hex/base64.
+I decided to not go down the rabbit hole here and use the libraries
+which handle encoding/decoding to/from hex/base64.
 
 #+BEGIN_SRC rust
 pub fn hex_to_b64(input: &str) -> Result<String> {
@@ -68,7 +70,7 @@ This solves the challenge without fuss.
 
 #+attr_obcell: :module c1
 #+BEGIN_SRC js :tangle nil
-cryptopals.hex_to_b64_web(c1_cipher)
+solution = cryptopals.hex_to_b64_web(c1_cipher)
 #+END_SRC
 
 Entering the test string given in the [[https://cryptopals.com/sets/1/challenges/1][challenge]] produce the expected
