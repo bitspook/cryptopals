@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-01-06 Thu 12:24 -->
+<!-- 2022-01-16 Sun 23:48 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cryptopals</title>
@@ -55,11 +55,6 @@ First challenge is straightforward enough, we are given a HEX encoded
 string, and we have to encode it to base64 instead.
 </p>
 
-<div class="ob-cell"data-module="c1" id="ob-celljJCd7V" ><div class="org-src-container">
-<pre class="src src-js">c1_cipher = <span class="hljs-string">"49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"</span>;
-</pre>
-</div></div>
-
 <p>
 I decided to not go down the rabbit hole here and use the libraries
 which handle encoding/decoding to/from hex/base64.
@@ -96,8 +91,9 @@ This solves the challenge without fuss.
 </div></div>
 
 
-<div class="ob-cell"data-module="c1" id="ob-cellHfFyYF" ><div class="org-src-container">
-<pre class="src src-js">solution = cryptopals.hex_to_b64_web(c1_cipher)
+<div class="ob-cell"data-module="c1" id="ob-cellpzCg8f" ><div class="org-src-container">
+<pre class="src src-js">c1_cipher = <span class="hljs-string">"49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"</span>;
+cryptopals.hex_to_b64_web(c1_cipher)
 </pre>
 </div></div>
 
@@ -191,7 +187,7 @@ input strings are hex encoded.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">xor</span>(<span class="hljs-variable-name">b1</span>: &amp;[<span class="hljs-type">u8</span>], <span class="hljs-variable-name">b2</span>: &amp;[<span class="hljs-type">u8</span>]) -&gt; <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt; {
+<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">xor</span>(<span class="hljs-variable-name">b1</span>: <span class="hljs-rust-ampersand">&amp;</span>[<span class="hljs-type">u8</span>], <span class="hljs-variable-name">b2</span>: <span class="hljs-rust-ampersand">&amp;</span>[<span class="hljs-type">u8</span>]) -&gt; <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt; {
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> <span class="hljs-variable-name">result</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt; = <span class="hljs-preprocessor">vec!</span>[];
 
     <span class="hljs-keyword">for</span> <span class="hljs-variable-name">i</span> <span class="hljs-keyword">in</span> 0..b1.len() {
@@ -292,7 +288,7 @@ Try and see if you can make this test pass.
 <div class="reveal" data-reveal="repeat-till">Reveal Solution</div>
 
 <div class="repeat-till" ><div class="org-src-container">
-<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">repeat_till</span>(<span class="hljs-variable-name">input</span>: &amp;[<span class="hljs-type">u8</span>], <span class="hljs-variable-name">length</span>: <span class="hljs-type">usize</span>) -&gt; <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt; {
+<pre class="src src-rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">repeat_till</span>(<span class="hljs-variable-name">input</span>: <span class="hljs-rust-ampersand">&amp;</span>[<span class="hljs-type">u8</span>], <span class="hljs-variable-name">length</span>: <span class="hljs-type">usize</span>) -&gt; <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt; {
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> <span class="hljs-variable-name">result</span> = <span class="hljs-preprocessor">vec!</span>[];
 
     <span class="hljs-keyword">for</span> <span class="hljs-variable-name">i</span> <span class="hljs-keyword">in</span> 0..length {
@@ -316,7 +312,7 @@ do so right in the browser.</div>
 <pre class="src src-rust"><span class="hljs-preprocessor">#[wasm_bindgen]</span>
 <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-function-name">fixed_key_xor</span>(<span class="hljs-variable-name">hexedCipher</span>: <span class="hljs-rust-ampersand">&amp;</span><span class="hljs-type">str</span>, <span class="hljs-variable-name">key</span>: <span class="hljs-type">u8</span>) -&gt; <span class="hljs-type">String</span> {
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">cipher</span> = <span class="hljs-constant">hex</span>::decode(hexedCipher).unwrap();
-    <span class="hljs-keyword">let</span> <span class="hljs-variable-name">repeated_key</span> = repeat_till(&amp;[key], cipher.len());
+    <span class="hljs-keyword">let</span> <span class="hljs-variable-name">repeated_key</span> = repeat_till(<span class="hljs-rust-ampersand">&amp;</span>[key], cipher.len());
     <span class="hljs-keyword">let</span> <span class="hljs-variable-name">result</span> = xor(<span class="hljs-rust-ampersand">&amp;</span>cipher, <span class="hljs-rust-ampersand">&amp;</span>repeated_key);
 
     <span class="hljs-constant">std</span>::<span class="hljs-type">str</span>::from_utf8(<span class="hljs-rust-ampersand">&amp;</span>result)
@@ -506,7 +502,7 @@ approach produces any good results.
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> <span class="hljs-variable-name">solution</span>: (<span class="hljs-type">u8</span>, <span class="hljs-type">String</span>, <span class="hljs-type">f64</span>) = (0, <span class="hljs-string">""</span>.to_string(), 99.0);
     <span class="hljs-keyword">for</span> <span class="hljs-variable-name">key</span> <span class="hljs-keyword">in</span> 1..255 {
         <span class="hljs-keyword">let</span> <span class="hljs-variable-name">cipher</span> = <span class="hljs-constant">hex</span>::decode(hexedCipher).unwrap();
-        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">repeated_key</span> = repeat_till(&amp;[key], cipher.len());
+        <span class="hljs-keyword">let</span> <span class="hljs-variable-name">repeated_key</span> = repeat_till(<span class="hljs-rust-ampersand">&amp;</span>[key], cipher.len());
         <span class="hljs-keyword">let</span> <span class="hljs-variable-name">result</span> = xor(<span class="hljs-rust-ampersand">&amp;</span>cipher, <span class="hljs-rust-ampersand">&amp;</span>repeated_key);
 
         <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-type">Ok</span>(result) = <span class="hljs-constant">std</span>::<span class="hljs-type">str</span>::from_utf8(<span class="hljs-rust-ampersand">&amp;</span>result) {
@@ -562,7 +558,7 @@ crack the cipher given in cryptopals challenge.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Charanjit Singh</p>
-<p class="date">Created: 2022-01-06 Thu 12:24</p>
+<p class="date">Created: 2022-01-16 Sun 23:48</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.0.50 (<a href="https://orgmode.org">Org</a> mode 9.5.2)</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

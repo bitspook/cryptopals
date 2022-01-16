@@ -75,7 +75,7 @@ const HexToB64 = ({
       </div>
 
       <TransitionRightIcon
-        {...c({
+        className={c({
           transitioner: true,
           hasSuccess: Boolean(output),
           hasError: Boolean(error),
@@ -83,7 +83,7 @@ const HexToB64 = ({
       />
 
       <div
-        {...c({
+        className={c({
           output: true,
           hasError: Boolean(error),
         })}

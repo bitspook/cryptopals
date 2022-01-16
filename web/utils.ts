@@ -11,10 +11,11 @@ export const classnames =
     moduleNames: SwitchableClassNames,
     nonModuleNames?: SwitchableClassNames
   ) => {
-    const reducer = (cns: SwitchableClassNames, module?: Object) =>
-      Object.entries(moduleNames).reduce((finalName, [name, shouldAdd]) => {
+    const reducer = (cns: SwitchableClassNames = {}, module?: Object) =>
+      Object.entries(cns).reduce((finalName, [name, shouldAdd]) => {
         if (shouldAdd) {
-          finalName += ` ${module ? module[name] : name}`;
+          const cName = module ? module[name] : name;
+          finalName += cName ? ` ${cName}` : '';
         }
 
         return finalName;
@@ -23,5 +24,5 @@ export const classnames =
     const className =
       reducer(moduleNames, cssModule) + " " + reducer(nonModuleNames);
 
-    return { className };
+    return className;
   };

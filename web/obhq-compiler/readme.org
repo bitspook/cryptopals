@@ -1,0 +1,15 @@
+Parse and run observablehq code.
+
+This code was originally copied from
+[[https://github.com/asg017/unofficial-observablehq-compiler/blob/beta/src/utils.js][asg017/unofficial-observablehq-compiler#beta]]. I copied it instead of forking the
+original repo and working on it because:
+
+1. I despise yarn/npm local (linked) development workflow. I think just copying
+   the bits I care about allow me to build maximum momentum.
+2. I don't need the other stuff this module is doing
+3. I wanted to do some radical stuff with this, which the owner of the repo seem
+   to disagree with (as indicated from some issues). I also wanted to do it in
+   Typescript.
+
+If my experiment is fruitful, I'll carry the changed bits back to the original
+repo and create a PR.

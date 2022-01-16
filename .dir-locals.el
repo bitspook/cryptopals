@@ -1,8 +1,12 @@
 ;;; Directory Local Variables
 ;;; For more information see (info "(emacs) Directory Variables")
 
-((org-mode . ((org-publish-project-alist . (("cryptopals"
+((typescript-tsx-mode . ((prettier-format-on-save-mode . t)))
+ (typescript-mode . ((prettier-format-on-save-mode . t)))
+ (scss-mode . ((prettier-format-on-save-mode . t)))
+ (org-mode . ((org-publish-project-alist . (("cryptopals"
 					                                   :base-directory "./"
+                                             :recursive nil
 					                                   :base-exteinsion "org"
 					                                   :publishing-directory "./web"
 					                                   :publishing-function org-html-publish-to-html

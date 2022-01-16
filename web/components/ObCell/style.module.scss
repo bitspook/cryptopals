@@ -1,13 +1,24 @@
 @import "~/web/scss/variables";
 
 $gutter-width: 20px;
+$color-gutter-bg: #eee;
+$color-gutter-bg-active: #ccddff99;
 
 .container {
   margin: 2rem 0;
   background-color: $color-bg-code-blocks;
   display: flex;
-}
+  position: relative;
 
+  &.hasAttention .gutter {
+    display: block;
+  }
+
+  &.isEditing .gutter {
+    display: block;
+    background: $color-gutter-bg-active;
+  }
+}
 
 .content {
   width: calc(100% - $gutter-width);
@@ -25,12 +36,20 @@ $gutter-width: 20px;
 }
 
 .gutter {
-  min-width: $gutter-width;
-  background: #eee;
+  min-width: 20px;
+  background: $color-gutter-bg;
+  position: absolute;
+  height: 100%;
+  left: -20px;
+  display: none;
 }
 
 .outputContainer {
   padding: 1rem;
   font-size: 1rem;
   overflow: auto;
+}
+
+.codeContainer {
+  outline: none;
 }
