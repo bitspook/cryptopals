@@ -1,4 +1,5 @@
 import { parseCell } from "@observablehq/parser";
+import { parseModule } from "./module-parser";
 import { setupRegularCell, setupImportCell, extractPath } from "./utils";
 
 const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
@@ -99,13 +100,11 @@ export class Interpreter {
     if (!module) throw Error("No module provided.");
     if (!observer) throw Error("No observer provided.");
 
-    const parsedModule = input
-      .split(/[\n;]/)
-      .map((s) => s.trim())
-      .filter(Boolean);
+    const parsedModule = parseModule(input);
     const cellPromises = [];
-    for (const cellInput of parsedModule) {
-      cellPromises.push(this.cell(cellInput, module, observer));
+    for (const cell of parsedModule.cells) {
+      cell.input = input;
+      cellPromises.push(this.cell(cell, module, observer));
     }
     return Promise.all(cellPromises);
   }
@@ -186,7 +185,7 @@ export class Interpreter {
             .define(cellName, [mutableName], (_) => _.generator),
         ];
       } else {
-        console.log("MODULE", module, cellName);
+        // TODO do this same thing for other cell types as well to allow re-running them
         if (module._scope.get(cellName)) {
           return [
             module.redefine(cellName, cellReferences, cellFunction.bind(this)),
