@@ -63,29 +63,9 @@ This solves the challenge without fuss.
 #+end_src
 
 #+attr_obcell: :module c1
-#+begin_src js
-  q = 1
-#+end_src
-
-#+attr_obcell: :module c1
-#+begin_src js
-  a = 1 + q
-#+end_src
-
-#+attr_obcell: :module c1
-#+begin_src js
-  b = 2
-#+end_src
-
-#+attr_obcell: :module c1
-#+begin_src js
-  c = a + b
-#+end_src
-
-#+attr_obcell: :module c1
-#+BEGIN_SRC js :tangle nil
+#+BEGIN_SRC obs :tangle nil :module c1
   c1_cipher = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-  cryptopals.hex_to_b64_web(c1_cipher)
+  c1_solution = cryptopals.hex_to_b64_web(c1_cipher);
 #+END_SRC
 
 Entering the test string given in the [[https://cryptopals.com/sets/1/challenges/1][challenge]] produce the expected
@@ -121,7 +101,7 @@ two strings of equal length, and we have to perform XOR bitwise
 operation on them. We can simply use rust's =^= operator, which does
 exactly that.
 
-But, this time let's tart with writing tests first.
+But, this time let's start with writing tests first.
 
 #+begin_src rust :exports none
   use wasm_bindgen::prelude::*;

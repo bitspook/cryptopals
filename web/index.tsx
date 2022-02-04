@@ -45,45 +45,23 @@ const initializeWasm = async () => {
   }
 };
 
-type ObModule = any;
-
 const initializeObNotebook = () => {
-  const registerModule = (mName: string, module: ObModule) => {
-    const ModuleObCell = ObCell({ module });
-
-    register(ModuleObCell, `ob-cell-${mName}`, ["selector"]);
-  };
-
   const runtime = new Runtime();
   const modules = {
     main: runtime.module(),
   };
 
-  Object.entries(modules).forEach(([mName, module]) =>
-    registerModule(mName, module)
-  );
-
-  document.querySelectorAll(".ob-cell").forEach((el) => {
-    if (!el.id) {
-      console.error(
-        "ob-cell must be uniquely identifiable. Please add an id for",
-        el
-      );
-      return;
-    }
-
-    const mName = el.getAttribute("data-module") || "main";
+  // Create modules specified by <ob-cell>s
+  document.querySelectorAll("ob-cell").forEach((el) => {
+    const mName = el.getAttribute("module") || "main";
 
     if (!modules[mName]) {
       const module = runtime.module();
       modules[mName] = module;
-      registerModule(mName, module);
     }
-
-    const cellEl = document.createElement(`ob-cell-${mName}`);
-    cellEl.setAttribute("selector", `#${el.id}`);
-    el.appendChild(cellEl);
   });
+
+  register(ObCell(modules), `ob-cell`, ["id", "module"]);
 };
 
 const run = async () => {

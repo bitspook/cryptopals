@@ -8,13 +8,24 @@ import * as s from "./style.module.scss";
 const c = classnames(s);
 
 interface ObCellProps {
-  selector: string;
+  id: string;
+  module: any;                  // Name of the Observable module stored in `moduleRepo`
 }
 
 const ObCell =
-  ({ module }) =>
+  (modulesRepo: {[name: string]: any}) =>
   (p: ObCellProps) => {
     let observer, interpreter;
+
+    // We need to do these shenanigans instead of obtaining a module like a
+    // normal component because web-components can pass only strings as
+    // attributes.
+    const module = modulesRepo[p.module];
+
+    if (!module) {
+      console.error('Invalid or missing Observable module for ObCell');
+      return null;
+    }
 
     const codeEl = useRef(null);
     const outputEl = useRef(null);
@@ -22,10 +33,14 @@ const ObCell =
     const [hasAttention, setHasAttention] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [code, setCode] = useState("");
+    // Let's keep the HTML provided by org-mode, and use that for editing.
+    // This saves us from adding a dependency on codemirror or something for now.
+    const [codeHtml, setCodeHtml] = useState("");
 
-    const cellNode = document.querySelector(p.selector);
+    const cellNode = document.querySelector(`#${p.id}`);
     const codeNode = cellNode.firstChild;
     if (!code) setCode(codeNode.textContent);
+    if (!codeHtml) setCodeHtml((codeNode as any).innerHTML);
 
     const handleMouseEnter = useCallback(() => {
       setHasAttention(true);
@@ -68,16 +83,15 @@ const ObCell =
     // Move the code element added by org-mode into our component for
     // easier manipulation
     useEffect(() => {
-      if (!codeEl.current || codeEl.current === codeNode) return;
-      codeNode.remove();
+      if (!codeEl.current) return;
 
-      codeEl.current.appendChild(codeNode);
-    }, [codeEl]);
+      codeEl.current.innerHTML = codeHtml;
+    }, [codeEl, codeHtml]);
 
     if (!cellNode) {
       console.error(
         "Unable to find cell-node for OBCell. [selector=",
-        p.selector,
+        p.id,
         "]"
       );
       return null;
