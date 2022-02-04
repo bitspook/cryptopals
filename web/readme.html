@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-02-04 Fri 15:06 -->
+<!-- 2022-02-04 Fri 17:00 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cryptopals</title>
@@ -19,11 +19,11 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgcfc7c90">Set 1</a>
+<li><a href="#orgd1913e3">Set 1</a>
 <ul>
-<li><a href="#org88f8901">Challenge 1: Convert Hex to Base64</a></li>
-<li><a href="#org593684c">Challenge 2: Fixed XOR</a></li>
-<li><a href="#org79a6826">Challenge 3: Single-byte XOR cipher</a></li>
+<li><a href="#org5104a5c">Challenge 1: Convert Hex to Base64</a></li>
+<li><a href="#orgfdf5dd9">Challenge 2: Fixed XOR</a></li>
+<li><a href="#org3119763">Challenge 3: Single-byte XOR cipher</a></li>
 </ul>
 </li>
 </ul>
@@ -43,13 +43,13 @@ anything; be vigilant about mistakes and misstatements.
 </p>
 </blockquote>
 
-<div id="outline-container-orgcfc7c90" class="outline-2">
-<h2 id="orgcfc7c90">Set 1</h2>
-<div class="outline-text-2" id="text-orgcfc7c90">
+<div id="outline-container-orgd1913e3" class="outline-2">
+<h2 id="orgd1913e3">Set 1</h2>
+<div class="outline-text-2" id="text-orgd1913e3">
 </div>
-<div id="outline-container-org88f8901" class="outline-3">
-<h3 id="org88f8901">Challenge 1: Convert Hex to Base64</h3>
-<div class="outline-text-3" id="text-org88f8901">
+<div id="outline-container-org5104a5c" class="outline-3">
+<h3 id="org5104a5c">Challenge 1: Convert Hex to Base64</h3>
+<div class="outline-text-3" id="text-org5104a5c">
 <p>
 First challenge is straightforward enough, we are given a HEX encoded
 string, and we have to encode it to base64 instead.
@@ -90,7 +90,7 @@ This solves the challenge without fuss.
 </pre>
 </div></div>
 
-<ob-cell module=c1 id="ob-cellHxTWAx"><div class="org-src-container">
+<ob-cell module=c1 id="ob-cell5DJrfw"><div class="org-src-container">
 <pre class="src src-obs">c1_cipher = <span class="hljs-string">"49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"</span>;
 c1_solution = cryptopals.hex_to_b64_web(c1_cipher);
 </pre>
@@ -126,9 +126,9 @@ lack of friction makes for a great developer experience.
 </div>
 </div>
 
-<div id="outline-container-org593684c" class="outline-3">
-<h3 id="org593684c">Challenge 2: Fixed XOR</h3>
-<div class="outline-text-3" id="text-org593684c">
+<div id="outline-container-orgfdf5dd9" class="outline-3">
+<h3 id="orgfdf5dd9">Challenge 2: Fixed XOR</h3>
+<div class="outline-text-3" id="text-orgfdf5dd9">
 <p>
 Next challenge is not particularly challenging either. We are given
 two strings of equal length, and we have to perform XOR bitwise
@@ -215,9 +215,9 @@ input strings are hex encoded.
 </div>
 </div>
 
-<div id="outline-container-org79a6826" class="outline-3">
-<h3 id="org79a6826">Challenge 3: Single-byte XOR cipher</h3>
-<div class="outline-text-3" id="text-org79a6826">
+<div id="outline-container-org3119763" class="outline-3">
+<h3 id="org3119763">Challenge 3: Single-byte XOR cipher</h3>
+<div class="outline-text-3" id="text-org3119763">
 <script type="text/javascript">
   const hexedCipher = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
 </script>
@@ -557,7 +557,7 @@ crack the cipher given in cryptopals challenge.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Charanjit Singh</p>
-<p class="date">Created: 2022-02-04 Fri 15:06</p>
+<p class="date">Created: 2022-02-04 Fri 17:00</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.0.50 (<a href="https://orgmode.org">Org</a> mode 9.5.2)</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

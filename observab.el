@@ -1,20 +1,22 @@
-(defun orgservable--org-src-html-block-advice (oldfun src-block contents info)
+(setq obs-lang "obs")
+
+(defvar org-babel-header-args:obs '((:module . :any)))
+
+(defun obs--org-src-html-block-advice (oldfun src-block contents info)
   "Turn org-src-block to an observable notebook cell.
 
 Usage:
-    #+OBCELL: :module a-module
-    #+begin_src js
+    #+begin_src obs :module main
     myVar = \"myVal\"
     #+end_src
 "
   (let* ((old-ret (funcall oldfun src-block contents info))
-         (obcell (org-export-read-attribute :attr_obcell src-block))
-         (module (org-export-read-attribute :attr_obcell src-block :module))
-         (module-name (or module "main"))
+         (lang (org-element-property :language src-block))
+         (module (or (org-export-read-attribute :attr_obs src-block :module) "main"))
          (id-attr (or (org-export-read-attribute :attr_obcell src-block :id) (make-temp-name "ob-cell"))))
-    (if obcell
+    (if (string= lang obs-lang)
         (concat
-         "<ob-cell module=" module-name
+         "<ob-cell module=" module
          " id="
          (format "\"%s\"" id-attr)
          ">"
@@ -22,6 +24,6 @@ Usage:
          "</ob-cell>")
       old-ret)))
 
-(add-to-list 'org-src-lang-modes '("obs" . js))
+(add-to-list 'org-src-lang-modes '(obs-lang . js))
 
-(advice-add 'org-html-src-block :around #'orgservable--org-src-html-block-advice)
+(advice-add 'org-html-src-block :around #'obs--org-src-html-block-advice)

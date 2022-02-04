@@ -4,6 +4,7 @@
 #+HTML_HEAD: <script type="module" src="./index.tsx"></script>
 #+OPTIONS: html-style:nil num:nil creator:comment
 #+STARTUP: hideblocks
+#+PROPERTY: header-args:obs :tangle nil
 
 This page is me solving [[https://cryptopals.com/sets/1/challenges/6][cryptopals challenges]] with Rust, and taking
 notes. UI widgets accompanying the rust snippets are running the wasm
@@ -62,8 +63,8 @@ This solves the challenge without fuss.
   }
 #+end_src
 
-#+attr_obcell: :module c1
-#+BEGIN_SRC obs :tangle nil :module c1
+#+ATTR_OBS: :module c1
+#+BEGIN_SRC obs :tangle nil
   c1_cipher = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
   c1_solution = cryptopals.hex_to_b64_web(c1_cipher);
 #+END_SRC
