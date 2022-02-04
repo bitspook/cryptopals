@@ -1,4 +1,4 @@
-@import "~/web/scss/variables";
+@import '~/web/scss/variables';
 
 $gutter-width: 20px;
 $color-gutter-bg: #eee;
@@ -22,6 +22,7 @@ $color-gutter-bg-active: #ccddff99;
 
 .content {
   width: calc(100% - $gutter-width);
+  position: relative;
 
   :global {
     .src {
@@ -50,6 +51,19 @@ $color-gutter-bg-active: #ccddff99;
   overflow: auto;
 }
 
+.menu {
+  position: absolute;
+  display: flex;
+  right: 0;
+  z-index: 9;
+  opacity: 0.5;
+}
+
 .codeContainer {
   outline: none;
+  margin: 0;
+
+  &:focus {
+    border: 1px solid transparent;
+  }
 }
