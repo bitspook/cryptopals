@@ -62,6 +62,25 @@ This solves the challenge without fuss.
   }
 #+end_src
 
+#+attr_obcell: :module c1
+#+begin_src js
+  q = 1
+#+end_src
+
+#+attr_obcell: :module c1
+#+begin_src js
+  a = 1 + q
+#+end_src
+
+#+attr_obcell: :module c1
+#+begin_src js
+  b = 2
+#+end_src
+
+#+attr_obcell: :module c1
+#+begin_src js
+  c = a + b
+#+end_src
 
 #+attr_obcell: :module c1
 #+BEGIN_SRC js :tangle nil

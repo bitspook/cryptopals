@@ -2,10 +2,10 @@ import { parseCell } from "@observablehq/parser";
 import { parseModule } from "./module-parser";
 import { setupRegularCell, setupImportCell, extractPath } from "./utils";
 
-const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
-const GeneratorFunction = Object.getPrototypeOf(function* () {}).constructor;
+const AsyncFunction = Object.getPrototypeOf(async function() { }).constructor;
+const GeneratorFunction = Object.getPrototypeOf(function*() { }).constructor;
 const AsyncGeneratorFunction = Object.getPrototypeOf(
-  async function* () {}
+  async function*() { }
 ).constructor;
 
 function createRegularCellDefinition(cell) {
@@ -185,18 +185,21 @@ export class Interpreter {
             .define(cellName, [mutableName], (_) => _.generator),
         ];
       } else {
-        // TODO do this same thing for other cell types as well to allow re-running them
-        if (module._scope.get(cellName)) {
-          return [
-            module.redefine(cellName, cellReferences, cellFunction.bind(this)),
-          ];
-        }
+        try {
+          // Force evaluation of variable. It throws error if it is not defined,
+          // in which case we create a new variable. But if it don't throw an
+          // error, we redfine the variable instead.
+          await module.value(cellName);
 
-        return [
-          module
-            .variable(observer(cellName))
-            .define(cellName, cellReferences, cellFunction.bind(this)),
-        ];
+          return [module
+            .redefine(cellName, cellReferences, cellFunction.bind(this)),];
+        } catch (err) {
+          return [
+            module
+              .variable(observer(cellName))
+              .define(cellName, cellReferences, cellFunction.bind(this)),
+          ];
+        };
       }
     }
   }

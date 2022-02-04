@@ -62,9 +62,7 @@ const ObCell =
 
       if (!code) return;
 
-      const returnVal = interpreter.module(code);
-
-      console.warn("RETURN VAL", returnVal);
+      interpreter.module(code);
     }, [outputEl, code]);
 
     // Move the code element added by org-mode into our component for
