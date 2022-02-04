@@ -13,4 +13,4 @@
 					                                   :auto-preamble t)))
               (eval (lambda ()
                       (add-hook 'after-save-hook #'org-publish-current-project nil t)
-                      (load-file "./orgservable.el"))))))
+                      (load-file "./observab.el"))))))
