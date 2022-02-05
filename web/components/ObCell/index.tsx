@@ -31,6 +31,7 @@ const ObCell = (modulesRepo: { [name: string]: any }) => (p: ObCellProps) => {
   const [hasAttention, setHasAttention] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [code, setCode] = useState('');
+  const [isCodeChanged, setIsCodeChanged] = useState(false);
 
   const cellNode = document.querySelector(`#${p.id}`);
   const codeNode = cellNode.firstChild;
@@ -52,15 +53,20 @@ const ObCell = (modulesRepo: { [name: string]: any }) => (p: ObCellProps) => {
     setIsEditing(false);
   }, []);
 
+  const handleCodeChange = useCallback(() => {
+    setIsCodeChanged(code !== codeEl.current.value.trim());
+  }, [code, codeEl]);
+
   const runCode = useCallback(() => {
     if (!codeEl.current) return;
 
     const newCode = codeEl.current.value;
 
-    if (newCode === code) return;
+    if (!isCodeChanged) return;
 
     setCode(newCode);
-  }, [codeEl, code]);
+    setIsCodeChanged(false);
+  }, [codeEl, isCodeChanged]);
 
   useEffect(() => {
     if (!outputEl.current) return;
@@ -100,14 +106,16 @@ const ObCell = (modulesRepo: { [name: string]: any }) => (p: ObCellProps) => {
         <div className={s.outputContainer} ref={outputEl}></div>
 
         <div className={s.menu}>
-          <button onClick={runCode}>Run</button>
+          {isCodeChanged && <button onClick={runCode}>Run</button>}
         </div>
 
         <textarea
           className={s.codeContainer}
           ref={codeEl}
           onFocus={handleFocus}
+          spellcheck={false}
           onBlur={handleBlur}
+          onKeyUp={handleCodeChange}
         >
           {code}
         </textarea>

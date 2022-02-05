@@ -1,4 +1,3 @@
-import "highlight.js/styles/stackoverflow-light.css";
 import { Runtime, Inspector } from "@observablehq/runtime";
 import "@observablehq/inspector/dist/inspector.css";
 import register from "preact-custom-element";

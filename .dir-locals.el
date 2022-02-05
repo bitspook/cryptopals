@@ -4,7 +4,8 @@
 ((typescript-tsx-mode . ((prettier-format-on-save-mode . t)))
  (typescript-mode . ((prettier-format-on-save-mode . t)))
  (scss-mode . ((prettier-format-on-save-mode . t)))
- (org-mode . ((org-publish-project-alist . (("cryptopals"
+ (org-mode . ((org-html-htmlize-output-type . inline-css)
+              (org-publish-project-alist . (("cryptopals"
 					                                   :base-directory "./"
                                              :recursive nil
 					                                   :base-exteinsion "org"
